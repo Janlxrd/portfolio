@@ -199,6 +199,11 @@ function CustomCursor() {
     };
 
     const maxOffset = 12;
+    const ringLead = 0.65;
+    const ringEaseBase = 0.28;
+    const ringEaseCap = 0.56;
+    const velocityEase = 0.32;
+    const innerEase = 0.3;
 
     const showCursor = () => {
       state.visible = true;
@@ -254,26 +259,36 @@ function CustomCursor() {
     };
 
     const render = () => {
-      const deltaX = state.mouseX - state.ringX;
-      const deltaY = state.mouseY - state.ringY;
+      state.smoothVX += (state.velocityX - state.smoothVX) * velocityEase;
+      state.smoothVY += (state.velocityY - state.smoothVY) * velocityEase;
+
+      const targetRingX = state.mouseX + state.smoothVX * ringLead;
+      const targetRingY = state.mouseY + state.smoothVY * ringLead;
+      const deltaX = targetRingX - state.ringX;
+      const deltaY = targetRingY - state.ringY;
       const distance = Math.hypot(deltaX, deltaY);
-      const followEase = Math.min(0.42, 0.22 + distance * 0.0022);
+      const followEase = Math.min(ringEaseCap, ringEaseBase + distance * 0.0026);
 
       state.ringX += deltaX * followEase;
       state.ringY += deltaY * followEase;
-      state.smoothVX += (state.velocityX - state.smoothVX) * 0.24;
-      state.smoothVY += (state.velocityY - state.smoothVY) * 0.24;
       state.pressProgress += ((state.pressed ? 1 : 0) - state.pressProgress) * 0.26;
 
+      const directionalX = state.mouseX - state.ringX + state.smoothVX * 0.6;
+      const directionalY = state.mouseY - state.ringY + state.smoothVY * 0.6;
+      const directionalMagnitude = Math.hypot(directionalX, directionalY);
       const directionalDistance = Math.min(
         maxOffset,
-        distance * 0.48 + Math.hypot(state.smoothVX, state.smoothVY) * 0.12
+        directionalMagnitude * 0.52 + Math.hypot(state.smoothVX, state.smoothVY) * 0.18
       );
-      const targetInnerX = distance ? (deltaX / distance) * directionalDistance : 0;
-      const targetInnerY = distance ? (deltaY / distance) * directionalDistance : 0;
+      const targetInnerX = directionalMagnitude
+        ? (directionalX / directionalMagnitude) * directionalDistance
+        : 0;
+      const targetInnerY = directionalMagnitude
+        ? (directionalY / directionalMagnitude) * directionalDistance
+        : 0;
 
-      state.innerX += (targetInnerX - state.innerX) * 0.22;
-      state.innerY += (targetInnerY - state.innerY) * 0.22;
+      state.innerX += (targetInnerX - state.innerX) * innerEase;
+      state.innerY += (targetInnerY - state.innerY) * innerEase;
 
       const outerScale = 1 - state.pressProgress * 0.24;
 
@@ -284,8 +299,8 @@ function CustomCursor() {
         `translate3d(${state.ringX + state.innerX}px, ${state.ringY + state.innerY}px, 0) ` +
         "translate3d(-50%, -50%, 0)";
 
-      state.velocityX *= 0.78;
-      state.velocityY *= 0.78;
+      state.velocityX *= 0.66;
+      state.velocityY *= 0.66;
       state.frame = window.requestAnimationFrame(render);
     };
 
@@ -428,10 +443,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
     const lenis = new Lenis({
       duration: 0.78,
       wheelMultiplier: 1.08,
@@ -526,10 +537,6 @@ export default function Home() {
   }, [toastMessage]);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
     const elements = document.querySelectorAll(".reveal-on-scroll");
     let startFrame = 0;
     const observer = new IntersectionObserver(
@@ -775,18 +782,16 @@ export default function Home() {
   };
 
   const handleBackToTop = () => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     pendingSectionRef.current = null;
 
-    if (!prefersReducedMotion && lenisRef.current) {
+    if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { duration: 0.85 });
       return;
     }
 
     window.scrollTo({
       top: 0,
-      behavior: prefersReducedMotion ? "auto" : "smooth"
+      behavior: "smooth"
     });
   };
 

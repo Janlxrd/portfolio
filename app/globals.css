@@ -1700,28 +1700,10 @@ a {
     scroll-behavior: auto;
   }
 
-  body,
-  a,
-  button,
-  input,
-  textarea,
-  select,
-  .button,
-  .skill-pill,
-  .project-card,
-  .contact-links a,
-  .nav a {
-    cursor: auto;
-  }
-
-  .cursor-layer {
-    display: none;
-  }
-
   .page {
-    opacity: 1;
+    opacity: 0;
     transform: none;
-    animation: none;
+    animation: reduced-page-enter 220ms ease forwards;
   }
 
   .background-glow,
@@ -1730,20 +1712,39 @@ a {
   }
 
   .reveal-on-scroll {
-    opacity: 1;
+    opacity: 0;
     transform: none;
     filter: none;
     will-change: auto;
-    transition: none;
+    transition: opacity 220ms ease var(--reveal-delay, 0ms);
+  }
+
+  .reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 
   .typing-cursor {
     animation: none;
   }
 
-  *,
-  *::before,
-  *::after {
-    transition: none !important;
+  .nav a:hover,
+  .button:hover,
+  .contact-links a:hover,
+  .contact-links button:hover,
+  .project-card:hover,
+  .back-to-top:hover {
+    transform: none;
+  }
+}
+
+@keyframes reduced-page-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
