@@ -1732,6 +1732,8 @@ a {
   .reveal-on-scroll {
     opacity: 1;
     transform: none;
+    filter: none;
+    will-change: auto;
     transition: none;
   }
 
