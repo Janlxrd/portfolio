@@ -346,8 +346,10 @@ function TypewriterTitle() {
 
   return (
     <h1 aria-label={fullText} className="type-title">
-      <span>{typedText}</span>
-      <span className="typing-cursor" aria-hidden="true" />
+      <span className="type-title-line">
+        <span className="type-title-text">{typedText}</span>
+        <span className="typing-cursor" aria-hidden="true" />
+      </span>
     </h1>
   );
 }
