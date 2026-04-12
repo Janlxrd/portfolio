@@ -4,6 +4,8 @@ import Lenis from "lenis";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const contactEmail = "contact@jano.eu.org";
+const birthDate = { year: 2007, month: 7, day: 12 };
+const birthTimeZone = "Europe/Bratislava";
 
 const featuredProjects = [
   {
@@ -80,6 +82,27 @@ const navItems = [
   { href: "#skills", label: "Skills" },
   { href: "#contact", label: "Contact" }
 ];
+
+function getCurrentAge() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: birthTimeZone,
+    year: "numeric",
+    month: "numeric",
+    day: "numeric"
+  }).formatToParts(new Date());
+
+  const year = Number(parts.find((part) => part.type === "year")?.value);
+  const month = Number(parts.find((part) => part.type === "month")?.value);
+  const day = Number(parts.find((part) => part.type === "day")?.value);
+
+  let age = year - birthDate.year;
+
+  if (month < birthDate.month || (month === birthDate.month && day < birthDate.day)) {
+    age -= 1;
+  }
+
+  return age;
+}
 
 function Bow() {
   return (
@@ -387,6 +410,7 @@ function TypewriterTitle() {
 }
 
 export default function Home() {
+  const [age, setAge] = useState(() => getCurrentAge());
   const [activeSection, setActiveSection] = useState("about");
   const [isNavPinned, setIsNavPinned] = useState(false);
   const [navIndicatorStyle, setNavIndicatorStyle] = useState(null);
@@ -439,6 +463,20 @@ export default function Home() {
 
     return () => {
       window.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateAge = () => {
+      setAge(getCurrentAge());
+    };
+
+    updateAge();
+
+    const interval = window.setInterval(updateAge, 60 * 60 * 1000);
+
+    return () => {
+      window.clearInterval(interval);
     };
   }, []);
 
@@ -841,9 +879,9 @@ export default function Home() {
             <TypewriterTitle />
 
             <p className="hero-text">
-              I&apos;m Jan, a student from Slovakia who enjoys building clean,
-              thoughtful websites and learning how things work behind the
-              scenes.
+              I&apos;m Jan, an <span suppressHydrationWarning>{age}</span>-year-old
+              student from Slovakia who enjoys building clean, thoughtful
+              websites and learning how things work behind the scenes.
             </p>
 
             <div className="hero-actions">
@@ -1003,10 +1041,10 @@ export default function Home() {
               <Heart />
               Contact
             </p>
-            <h2>Let&apos;s make something cute and polished.</h2>
+            <h2>Get in touch.</h2>
             <p className="section-text">
-              Replace the placeholder links with your real details and keep the
-              message simple.
+              I&apos;m always open to connecting with new people, whether it&apos;s to chat about potential opportunities, collaborate on projects, or just
+              talk about tech and programming. Feel free to reach out!
             </p>
 
             <div className="contact-links">
