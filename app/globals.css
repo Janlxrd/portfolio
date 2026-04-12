@@ -299,8 +299,9 @@ a {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(21.5rem, 24rem);
-  gap: clamp(1rem, 2vw, 1.75rem);
+  grid-template-columns: minmax(0, 39.5rem) minmax(21.5rem, 24rem);
+  justify-content: space-between;
+  gap: clamp(1.25rem, 3vw, 2rem);
   align-items: start;
   padding: 1rem 0 3rem;
 }
@@ -312,13 +313,15 @@ a {
   justify-self: start;
   min-width: 0;
   width: 100%;
-  max-width: 42rem;
+  max-width: 39.5rem;
   padding: 1.25rem 0;
 }
 
 .hero-note {
   min-width: 0;
-  width: 100%;
+  width: min(100%, 24rem);
+  max-width: 24rem;
+  justify-self: end;
 }
 
 .sticker-label,
@@ -366,43 +369,50 @@ a {
 }
 
 .hero h1 {
-  font-size: clamp(2.4rem, 5vw, 4.8rem);
-  line-height: 1.14;
+  font-size: clamp(2.45rem, 5vw, 4.35rem);
+  line-height: 1.08;
   letter-spacing: 0.01em;
   max-width: none;
   min-width: 0;
+  font-kerning: none;
+  font-variant-ligatures: none;
 }
 
 .type-title {
   display: block;
   margin: 0;
-  width: auto;
+  width: 100%;
   max-width: 100%;
   min-width: 0;
   min-height: 1.24em;
 }
 
 .type-title-line {
-  position: relative;
-  display: inline-block;
-  width: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  width: 100%;
   max-width: 100%;
   min-width: 0;
-  padding-right: 0.58em;
+  row-gap: 0.08em;
   vertical-align: top;
 }
 
-.type-title-text {
+.type-title-word {
   display: inline-block;
-  max-width: 100%;
-  min-width: 0;
+  flex: 0 0 auto;
   white-space: nowrap;
 }
 
+.type-title-word.is-spaced {
+  margin-inline-end: 0.42em;
+}
+
 .typing-cursor {
-  position: absolute;
-  top: 0.08em;
-  right: 0;
+  position: static;
+  flex: 0 0 auto;
+  margin-bottom: 0.06em;
+  margin-inline-start: 0.04em;
   width: 0.28em;
   height: 1.08em;
   border-radius: 999px;
@@ -1390,8 +1400,27 @@ a {
   transform: rotate(-14deg);
 }
 
+@media (max-width: 1080px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy,
+  .hero-note {
+    width: 100%;
+    max-width: none;
+  }
+
+  .hero-note {
+    justify-self: stretch;
+  }
+
+  .hero h1 {
+    max-width: none;
+  }
+}
+
 @media (max-width: 940px) {
-  .hero,
   .section-grid,
   .project-grid,
   .bottom-grid {
@@ -1405,26 +1434,7 @@ a {
 }
 
 @media (max-width: 720px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
-  .type-title-line {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 0.24rem;
-    padding-right: 0;
-  }
-
-  .type-title-text {
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-
   .typing-cursor {
-    position: static;
-    flex: 0 0 auto;
     margin-bottom: 0.08em;
   }
 }

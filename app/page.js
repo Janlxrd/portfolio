@@ -322,6 +322,8 @@ function CustomCursor() {
 function TypewriterTitle() {
   const fullText = "Hey, I'm Jan.";
   const [typedText, setTypedText] = useState("");
+  const words = typedText.split(" ");
+  const endsWithSpace = typedText.endsWith(" ");
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -346,8 +348,23 @@ function TypewriterTitle() {
 
   return (
     <h1 aria-label={fullText} className="type-title">
-      <span className="type-title-line">
-        <span className="type-title-text">{typedText}</span>
+      <span aria-hidden="true" className="type-title-line">
+        {words.map((word, index) => {
+          if (!word) {
+            return null;
+          }
+
+          const hasTrailingSpace = index < words.length - 1 || endsWithSpace;
+
+          return (
+            <span
+              className={`type-title-word${hasTrailingSpace ? " is-spaced" : ""}`}
+              key={`${word}-${index}`}
+            >
+              {word}
+            </span>
+          );
+        })}
         <span className="typing-cursor" aria-hidden="true" />
       </span>
     </h1>
