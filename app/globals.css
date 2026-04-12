@@ -1009,6 +1009,11 @@ a {
   animation-delay: -2.2s;
 }
 
+.ornament-kitty {
+  animation-duration: 7.4s;
+  animation-delay: -1.6s;
+}
+
 .ornament-apple {
   animation-duration: 7.6s;
   animation-delay: -3.1s;
@@ -1016,7 +1021,7 @@ a {
 
 .bow,
 .sparkle,
-.heart,
+.kitty-mark,
 .apple {
   flex: 0 0 auto;
 }
@@ -1024,41 +1029,96 @@ a {
 .bow {
   position: relative;
   display: inline-block;
-  width: 1.3rem;
-  height: 0.85rem;
+  width: 1.36rem;
+  height: 0.95rem;
 }
 
 .bow::before,
 .bow::after {
   content: "";
   position: absolute;
-  top: 0.14rem;
-  width: 0.56rem;
-  height: 0.52rem;
+  top: 0.08rem;
+  width: 0.58rem;
+  height: 0.58rem;
   border: 1px solid rgba(32, 24, 27, 0.72);
-  background: var(--pink);
-  border-radius: 999px 999px 999px 0.45rem;
+  background: linear-gradient(180deg, #ffd8df 0%, #ffb9c8 100%);
+  border-radius: 999px 999px 999px 0.48rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .bow::before {
   left: 0;
-  transform: rotate(-28deg);
+  transform: rotate(-22deg);
 }
 
 .bow::after {
   right: 0;
-  transform: scaleX(-1) rotate(-28deg);
+  transform: scaleX(-1) rotate(-22deg);
 }
 
-.bow span {
+.bow-knot {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0.34rem;
-  height: 0.34rem;
-  border-radius: 0.2rem;
+  z-index: 2;
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 0.24rem;
   background: var(--accent);
   transform: translate(-50%, -50%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.bow-tail {
+  position: absolute;
+  bottom: 0.02rem;
+  z-index: 1;
+  width: 0.24rem;
+  height: 0.38rem;
+  background: linear-gradient(180deg, #ffcad4 0%, #f2a9b8 100%);
+  border: 1px solid rgba(32, 24, 27, 0.62);
+  border-top: 0;
+  border-radius: 0 0 0.16rem 0.16rem;
+}
+
+.bow-tail-left {
+  left: 0.38rem;
+  transform: rotate(14deg);
+}
+
+.bow-tail-right {
+  right: 0.38rem;
+  transform: rotate(-14deg);
+}
+
+.bow-compact {
+  width: 1.08rem;
+  height: 0.82rem;
+}
+
+.bow-compact::before,
+.bow-compact::after {
+  top: 0.1rem;
+  width: 0.47rem;
+  height: 0.48rem;
+}
+
+.bow-compact .bow-knot {
+  width: 0.3rem;
+  height: 0.3rem;
+}
+
+.bow-compact .bow-tail {
+  width: 0.2rem;
+  height: 0.3rem;
+}
+
+.bow-compact .bow-tail-left {
+  left: 0.3rem;
+}
+
+.bow-compact .bow-tail-right {
+  right: 0.3rem;
 }
 
 .sparkle {
@@ -1089,35 +1149,144 @@ a {
   height: 0.12rem;
 }
 
-.heart {
+.kitty-mark {
   position: relative;
   display: inline-block;
-  width: 0.75rem;
-  height: 0.68rem;
-  transform: rotate(-45deg);
-  background: var(--accent);
+  width: 1.48rem;
+  height: 1.3rem;
 }
 
-.heart::before,
-.heart::after {
+.kitty-head {
+  position: absolute;
+  inset: 0.18rem 0.08rem 0 0.08rem;
+  border: 1px solid rgba(32, 24, 27, 0.72);
+  border-radius: 44% 44% 42% 42%;
+  background: linear-gradient(180deg, #fffefe 0%, #f7ecee 100%);
+}
+
+.kitty-ear {
+  position: absolute;
+  top: -0.16rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid rgba(32, 24, 27, 0.72);
+  background: linear-gradient(180deg, #fffefe 0%, #f7ecee 100%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.kitty-ear-left {
+  left: 0.14rem;
+  transform: rotate(-8deg);
+}
+
+.kitty-ear-right {
+  right: 0.14rem;
+  transform: rotate(8deg);
+}
+
+.kitty-eye,
+.kitty-nose {
+  position: absolute;
+  top: 0.44rem;
+  width: 0.1rem;
+  height: 0.1rem;
+  border-radius: 999px;
+  background: #2d2125;
+}
+
+.kitty-eye-left {
+  left: 0.34rem;
+}
+
+.kitty-eye-right {
+  right: 0.34rem;
+}
+
+.kitty-nose {
+  top: 0.56rem;
+  left: 50%;
+  width: 0.12rem;
+  height: 0.09rem;
+  background: #f2c24f;
+  transform: translateX(-50%);
+}
+
+.kitty-whiskers {
+  position: absolute;
+  top: 0.58rem;
+  width: 0.34rem;
+  height: 0.06rem;
+}
+
+.kitty-whiskers::before,
+.kitty-whiskers::after,
+.kitty-whiskers span {
   content: "";
   position: absolute;
-  background: var(--accent);
-  border-radius: 999px;
-}
-
-.heart::before {
-  top: -0.36rem;
   left: 0;
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 100%;
+  height: 0.05rem;
+  border-radius: 999px;
+  background: rgba(32, 24, 27, 0.8);
 }
 
-.heart::after {
-  top: 0;
-  left: 0.36rem;
-  width: 0.75rem;
-  height: 0.75rem;
+.kitty-whiskers::before {
+  top: -0.1rem;
+}
+
+.kitty-whiskers::after {
+  top: 0.1rem;
+}
+
+.kitty-whiskers-left {
+  left: -0.18rem;
+  transform: rotate(8deg);
+}
+
+.kitty-whiskers-right {
+  right: -0.18rem;
+  transform: scaleX(-1) rotate(8deg);
+}
+
+.kitty-bow {
+  position: absolute;
+  top: 0.02rem;
+  right: -0.02rem;
+  width: 0.62rem;
+  height: 0.52rem;
+}
+
+.kitty-bow::before,
+.kitty-bow::after {
+  content: "";
+  position: absolute;
+  top: 0.02rem;
+  width: 0.28rem;
+  height: 0.28rem;
+  border: 1px solid rgba(32, 24, 27, 0.72);
+  background: linear-gradient(180deg, #ffcad4 0%, #f09eb2 100%);
+  border-radius: 999px 999px 999px 0.22rem;
+}
+
+.kitty-bow::before {
+  left: 0;
+  transform: rotate(-22deg);
+}
+
+.kitty-bow::after {
+  right: 0;
+  transform: scaleX(-1) rotate(-22deg);
+}
+
+.kitty-bow-knot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.18rem;
+  height: 0.18rem;
+  border-radius: 0.12rem;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
 }
 
 .apple {

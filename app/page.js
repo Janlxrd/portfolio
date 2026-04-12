@@ -85,7 +85,9 @@ function Bow() {
   return (
     <span className="ornament ornament-bow" aria-hidden="true">
       <span className="bow">
-        <span />
+        <span className="bow-knot" />
+        <span className="bow-tail bow-tail-left" />
+        <span className="bow-tail bow-tail-right" />
       </span>
     </span>
   );
@@ -102,7 +104,33 @@ function Sparkle() {
 function Heart() {
   return (
     <span className="ornament ornament-heart" aria-hidden="true">
-      <span className="heart" />
+      <span className="bow bow-compact">
+        <span className="bow-knot" />
+        <span className="bow-tail bow-tail-left" />
+        <span className="bow-tail bow-tail-right" />
+      </span>
+    </span>
+  );
+}
+
+function KittyMark() {
+  return (
+    <span className="ornament ornament-kitty" aria-hidden="true">
+      <span className="kitty-mark">
+        <span className="kitty-head">
+          <span className="kitty-ear kitty-ear-left" />
+          <span className="kitty-ear kitty-ear-right" />
+          <span className="kitty-eye kitty-eye-left" />
+          <span className="kitty-eye kitty-eye-right" />
+          <span className="kitty-nose" />
+          <span className="kitty-whiskers kitty-whiskers-left" />
+          <span className="kitty-whiskers kitty-whiskers-right" />
+        </span>
+
+        <span className="kitty-bow">
+          <span className="kitty-bow-knot" />
+        </span>
+      </span>
     </span>
   );
 }
@@ -741,7 +769,7 @@ export default function Home() {
 
         <header className={`topbar${isNavPinned ? " is-scrolled" : ""}`}>
           <a className="brand" href="#home">
-            <Bow />
+            <KittyMark />
             jan
           </a>
 
