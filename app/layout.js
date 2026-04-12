@@ -6,6 +6,13 @@ export const metadata = {
   description: "My portfolio"
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#171114"
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
