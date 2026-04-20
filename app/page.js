@@ -16,7 +16,7 @@ const featuredProjects = [
       "A closed-source multi-purpose Discord bot.",
     overview:
       "Vantix is a multi-purpose Discord bot built for public use. The code is closed source, but the website is live and the bot can be invited through Discord.",
-    stack: ["Discord bot", "Closed source", "Public website"],
+    stack: ["TypeScript", "discord.js", "PostgreSQL", "Prisma", "Redis", "Express", "Docker"],
     highlights: [
       "Multi-purpose Discord bot",
       "Built for public use",
