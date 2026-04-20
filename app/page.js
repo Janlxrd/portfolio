@@ -79,11 +79,15 @@ const featuredProjects = [
 const skillGroups = [
   {
     title: "Coding",
-    items: ["Python", "TypeScript"]
+    items: ["Python", "TypeScript", "Express"]
   },
   {
     title: "Databases",
-    items: ["PostgreSQL"]
+    items: ["PostgreSQL", "Prisma", "Redis"]
+  },
+  {
+    title: "Tools",
+    items: ["Docker"]
   },
   {
     title: "Languages",
