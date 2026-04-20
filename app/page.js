@@ -9,21 +9,25 @@ const birthTimeZone = "Europe/Bratislava";
 
 const featuredProjects = [
   {
-    title: "Project coming soon",
-    category: "Coming soon",
-    year: "Soon",
+    title: "Vantix",
+    category: "Discord bot",
+    year: "Private",
     description:
-      "A real project will go here soon, with a short summary of what it does and what I built.",
+      "A closed-source Discord bot with a public website and a live invite link.",
     overview:
-      "This is a placeholder for a future project. Later, it will include the goal, the stack, the problems I solved, and what I learned from building it.",
-    stack: ["Summary", "Stack", "Results"],
+      "Vantix is a private Discord bot project. The codebase is closed source, but the website is live and the bot can already be invited through Discord.",
+    stack: ["Discord bot", "Closed source", "Public website"],
     highlights: [
-      "What the project is for",
-      "How I approached the build",
-      "What I learned from it"
+      "Closed-source bot project",
+      "Public landing page is live",
+      "Bot invite is ready to use"
     ],
-    liveUrl: null,
-    codeUrl: null
+    footerTags: ["Closed source", "Live now"],
+    liveUrl: "https://vantix.jano.eu.org",
+    liveLabel: "Website",
+    codeUrl:
+      "https://discord.com/oauth2/authorize?client_id=1495397495868756058&scope=bot+applications.commands&integration_type=0&permissions=1237219405014",
+    codeLabel: "Invite bot"
   },
   {
     title: "Another project on the way",
@@ -994,8 +998,11 @@ export default function Home() {
                   <p className="project-description">{project.description}</p>
 
                   <div className="project-footer">
-                    <span className="tiny-pill">Coming soon</span>
-                    <span className="tiny-pill">Work in progress</span>
+                    {(project.footerTags ?? ["Coming soon", "Work in progress"]).map((tag) => (
+                      <span className="tiny-pill" key={tag}>
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </article>
               </div>
@@ -1116,8 +1123,14 @@ export default function Home() {
 
             {selectedProject.liveUrl || selectedProject.codeUrl ? (
               <div className="drawer-actions">
-                <ProjectActionLink href={selectedProject.liveUrl} label="Visit site" />
-                <ProjectActionLink href={selectedProject.codeUrl} label="View code" />
+                <ProjectActionLink
+                  href={selectedProject.liveUrl}
+                  label={selectedProject.liveLabel ?? "Visit site"}
+                />
+                <ProjectActionLink
+                  href={selectedProject.codeUrl}
+                  label={selectedProject.codeLabel ?? "View code"}
+                />
               </div>
             ) : null}
           </aside>
