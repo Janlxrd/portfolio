@@ -9,52 +9,52 @@ const birthTimeZone = "Europe/Bratislava";
 
 const featuredProjects = [
   {
-    title: "Lorem Ipsum 01",
-    category: "Placeholder",
+    title: "Project coming soon",
+    category: "Coming soon",
     year: "Soon",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "A real project will go here soon, with a short summary of what it does and what I built.",
     overview:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    stack: ["Lorem", "Ipsum", "Dolor"],
+      "This is a placeholder for a future project. Later, it will include the goal, the stack, the problems I solved, and what I learned from building it.",
+    stack: ["Summary", "Stack", "Results"],
     highlights: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+      "What the project is for",
+      "How I approached the build",
+      "What I learned from it"
     ],
     liveUrl: null,
     codeUrl: null
   },
   {
-    title: "Lorem Ipsum 02",
-    category: "Placeholder",
+    title: "Another project on the way",
+    category: "Coming soon",
     year: "Soon",
     description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "This card is saving a spot for another project I'll add once it's ready to share.",
     overview:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    stack: ["Sit", "Amet", "Consectetur"],
+      "Once I have more work online, this section will show the idea behind the project, the tools I used, and the parts I'm most proud of.",
+    stack: ["Idea", "Build", "Takeaways"],
     highlights: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      "Quis nostrud exercitation ullamco laboris nisi ut aliquip.",
-      "Duis aute irure dolor in reprehenderit in voluptate velit."
+      "The main goal",
+      "Key features or decisions",
+      "What changed while I built it"
     ],
     liveUrl: null,
     codeUrl: null
   },
   {
-    title: "Lorem Ipsum 03",
-    category: "Placeholder",
+    title: "More work soon",
+    category: "Coming soon",
     year: "Soon",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "I'll use this space for another project, with a simple breakdown of the work and the outcome.",
     overview:
-      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    stack: ["Adipiscing", "Elit", "Tempor"],
+      "This placeholder will turn into a full project summary with the context, the build process, and the final result.",
+    stack: ["Context", "Process", "Outcome"],
     highlights: [
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
-      "Excepteur sint occaecat cupidatat non proident."
+      "Why I built it",
+      "How I put it together",
+      "What the final result was"
     ],
     liveUrl: null,
     codeUrl: null
@@ -63,7 +63,7 @@ const featuredProjects = [
 
 const skillGroups = [
   {
-    title: "Programming",
+    title: "Coding",
     items: ["Python", "TypeScript"]
   },
   {
@@ -72,7 +72,7 @@ const skillGroups = [
   },
   {
     title: "Languages",
-    items: ["Slovak", "English", "Spanish (basic)", "German (basic)"]
+    items: ["Slovak", "English", "Spanish (a little)", "German (a little)"]
   }
 ];
 
@@ -813,9 +813,9 @@ export default function Home() {
         throw new Error("Clipboard unavailable");
       }
 
-      setToastMessage("Email copied");
+      setToastMessage("Email copied.");
     } catch {
-      setToastMessage("Could not copy email");
+      setToastMessage("Couldn't copy the email.");
     }
   };
 
@@ -873,23 +873,23 @@ export default function Home() {
           <div className="hero-copy reveal-on-scroll">
             <p className="sticker-label">
               <Bow />
-              Full-stack developer
+              Student and full-stack developer
             </p>
 
             <TypewriterTitle />
 
             <p className="hero-text">
               I&apos;m Jan, an <span suppressHydrationWarning>{age}</span>-year-old
-              student from Slovakia who enjoys building clean, thoughtful
+              student from Slovakia who likes building clear, thoughtful
               websites and learning how things work behind the scenes.
             </p>
 
             <div className="hero-actions">
               <a className="button button-primary" href="#projects">
-                View projects
+                See my work
               </a>
               <a className="button button-secondary" href="mailto:contact@jano.eu.org">
-                Contact me
+                Get in touch
               </a>
             </div>
           </div>
@@ -899,16 +899,17 @@ export default function Home() {
               <Sparkle />
               Current focus
             </p>
-            <h2>Making it through school and improving every day.</h2>
+            <h2>Focused on school and steady progress.</h2>
             <p>
-              Right now I&apos;m focused on school, learning consistently, and
-              getting better at building thoughtful projects one step at a time.
+              Right now, most of my energy goes into school, learning
+              consistently, and getting a little better every time I build
+              something.
             </p>
 
             <div className="note-tags">
               <span>School</span>
               <span>Learning</span>
-              <span>Progress</span>
+              <span>Improving</span>
             </div>
           </aside>
         </section>
@@ -925,12 +926,13 @@ export default function Home() {
               <Heart />
               About
             </p>
-            <h2>Full-stack developer, curious by nature.</h2>
+            <h2>Full-stack developer with a back-end focus.</h2>
             <p className="section-text">
-              I&apos;m a full-stack developer based in Slovakia and currently a
-              student, with over 2 years of back-end experience. Python is my
-              favorite language because it&apos;s easy to learn and use, and I
-              love understanding how things work behind the scenes.
+              I&apos;m a full-stack developer from Slovakia with over two years
+              of back-end experience. I&apos;m still in school, and Python is
+              still the language I enjoy most because it feels simple,
+              practical, and easy to work with. I also like understanding how
+              things work under the hood.
             </p>
           </article>
 
@@ -939,11 +941,11 @@ export default function Home() {
               <Apple />
               At a glance
             </p>
-            <h2>A few quick details about me.</h2>
+            <h2>A quick intro.</h2>
             <ul className="details-list">
               <li>Based in Slovakia</li>
-              <li>Currently a student</li>
-              <li>Over 2 years of back-end experience</li>
+              <li>Still in school</li>
+              <li>2+ years of back-end experience</li>
               <li>Favorite language: Python</li>
             </ul>
           </aside>
@@ -955,7 +957,7 @@ export default function Home() {
               <Sparkle />
               Projects
             </p>
-            <h2>A few projects I&apos;ve worked on.</h2>
+            <h2>Real projects coming soon.</h2>
           </div>
 
           <div className="project-grid">
@@ -992,8 +994,8 @@ export default function Home() {
                   <p className="project-description">{project.description}</p>
 
                   <div className="project-footer">
-                    <span className="tiny-pill">Placeholder</span>
                     <span className="tiny-pill">Coming soon</span>
+                    <span className="tiny-pill">Work in progress</span>
                   </div>
                 </article>
               </div>
@@ -1013,7 +1015,7 @@ export default function Home() {
               <Bow />
               Skills
             </p>
-            <h2>Tools and strengths.</h2>
+            <h2>What I work with.</h2>
 
             <div className="skills-groups">
               {skillGroups.map((group) => (
@@ -1041,16 +1043,16 @@ export default function Home() {
               <Heart />
               Contact
             </p>
-            <h2>Get in touch.</h2>
+            <h2>Let&apos;s talk.</h2>
             <p className="section-text">
-              I&apos;m always open to connecting with new people, whether it&apos;s to chat about potential opportunities, collaborate on projects, or just
-              talk about tech and programming. Feel free to reach out!
+              If you&apos;d like to talk about a project, ask a question, or
+              just say hi, feel free to reach out.
             </p>
 
             <div className="contact-links">
               <button className="contact-copy" onClick={handleCopyEmail} type="button">
                 <span>{contactEmail}</span>
-                <span className="contact-copy-hint">Click to copy</span>
+                <span className="contact-copy-hint">Tap or click to copy</span>
               </button>
               <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
                 GitHub
@@ -1064,7 +1066,7 @@ export default function Home() {
 
         <footer className="site-footer reveal-on-scroll" style={{ "--reveal-delay": "120ms" }}>
           <p>&copy; {currentYear} Jan</p>
-          <p>Made with ❤️ by Jan in Next.js.</p>
+          <p>Built with Next.js.</p>
         </footer>
       </div>
 
@@ -1093,7 +1095,7 @@ export default function Home() {
             <p className="drawer-description">{selectedProject.overview}</p>
 
             <div className="drawer-section">
-              <p className="drawer-section-title">What I built</p>
+              <p className="drawer-section-title">Highlights</p>
               <ul className="drawer-list">
                 {selectedProject.highlights.map((highlight) => (
                   <li key={highlight}>{highlight}</li>
@@ -1114,8 +1116,8 @@ export default function Home() {
 
             {selectedProject.liveUrl || selectedProject.codeUrl ? (
               <div className="drawer-actions">
-                <ProjectActionLink href={selectedProject.liveUrl} label="Live project" />
-                <ProjectActionLink href={selectedProject.codeUrl} label="Code" />
+                <ProjectActionLink href={selectedProject.liveUrl} label="Visit site" />
+                <ProjectActionLink href={selectedProject.codeUrl} label="View code" />
               </div>
             ) : null}
           </aside>

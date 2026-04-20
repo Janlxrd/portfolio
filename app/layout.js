@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata = {
   title: "Jan's Portfolio",
-  description: "My portfolio"
+  description: "Portfolio site for Jan, a student and full-stack developer from Slovakia."
 };
 
 export const viewport = {
