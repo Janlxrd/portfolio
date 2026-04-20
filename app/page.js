@@ -1052,7 +1052,7 @@ export default function Home() {
                 <span>{contactEmail}</span>
                 <span className="contact-copy-hint">Click to copy</span>
               </button>
-              <a href="https://github.com/" target="_blank" rel="noreferrer">
+              <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
                 GitHub
               </a>
               <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
@@ -1064,7 +1064,7 @@ export default function Home() {
 
         <footer className="site-footer reveal-on-scroll" style={{ "--reveal-delay": "120ms" }}>
           <p>&copy; {currentYear} Jan</p>
-          <p>Built with care in Next.js.</p>
+          <p>Made with ❤️ by Jan in Next.js.</p>
         </footer>
       </div>
 
