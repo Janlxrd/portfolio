@@ -13,21 +13,32 @@ const featuredProjects = [
     category: "Discord bot",
     year: "Private",
     description:
-      "A closed-source Discord bot with a public website and a live invite link.",
+      "A closed-source multi-purpose Discord bot.",
     overview:
-      "Vantix is a private Discord bot project. The codebase is closed source, but the website is live and the bot can already be invited through Discord.",
+      "Vantix is a multi-purpose Discord bot built for public use. The code is closed source, but the website is live and the bot can be invited through Discord.",
     stack: ["Discord bot", "Closed source", "Public website"],
     highlights: [
-      "Closed-source bot project",
-      "Public landing page is live",
-      "Bot invite is ready to use"
+      "Multi-purpose Discord bot",
+      "Built for public use",
+      "Live website and invite link"
     ],
-    footerTags: ["Closed source", "Live now"],
+    cardActions: [
+      {
+        href: "https://vantix.jano.eu.org",
+        label: "Website",
+        primary: true
+      },
+      {
+        href:
+          "https://discord.com/oauth2/authorize?client_id=1495397495868756058&scope=bot+applications.commands&integration_type=0&permissions=1237219405014",
+        label: "Invite to Discord"
+      }
+    ],
     liveUrl: "https://vantix.jano.eu.org",
     liveLabel: "Website",
     codeUrl:
       "https://discord.com/oauth2/authorize?client_id=1495397495868756058&scope=bot+applications.commands&integration_type=0&permissions=1237219405014",
-    codeLabel: "Invite bot"
+    codeLabel: "Invite to Discord"
   },
   {
     title: "Another project on the way",
@@ -172,8 +183,15 @@ function Apple() {
   );
 }
 
-function ProjectActionLink({ href, label, compact = false }) {
-  const className = `project-action${compact ? " is-compact" : ""}${href ? "" : " is-disabled"}`;
+function ProjectActionLink({
+  href,
+  label,
+  compact = false,
+  primary = false,
+  stopPropagation = false
+}) {
+  const className =
+    `project-action${compact ? " is-compact" : ""}${primary ? " project-action-primary" : ""}${href ? "" : " is-disabled"}`;
 
   if (!href) {
     return (
@@ -184,7 +202,13 @@ function ProjectActionLink({ href, label, compact = false }) {
   }
 
   return (
-    <a className={className} href={href} rel="noreferrer" target="_blank">
+    <a
+      className={className}
+      href={href}
+      onClick={stopPropagation ? (event) => event.stopPropagation() : undefined}
+      rel="noreferrer"
+      target="_blank"
+    >
       {label}
     </a>
   );
@@ -998,11 +1022,22 @@ export default function Home() {
                   <p className="project-description">{project.description}</p>
 
                   <div className="project-footer">
-                    {(project.footerTags ?? ["Coming soon", "Work in progress"]).map((tag) => (
-                      <span className="tiny-pill" key={tag}>
-                        {tag}
-                      </span>
-                    ))}
+                    {project.cardActions
+                      ? project.cardActions.map((action) => (
+                          <ProjectActionLink
+                            compact
+                            href={action.href}
+                            key={action.label}
+                            label={action.label}
+                            primary={action.primary}
+                            stopPropagation
+                          />
+                        ))
+                      : (project.footerTags ?? ["Coming soon", "Work in progress"]).map((tag) => (
+                          <span className="tiny-pill" key={tag}>
+                            {tag}
+                          </span>
+                        ))}
                   </div>
                 </article>
               </div>
@@ -1064,8 +1099,11 @@ export default function Home() {
               <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
                 GitHub
               </a>
-              <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
-                LinkedIn
+              <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
+                Instagram
+              </a>
+              <a href="https://discord.com/" target="_blank" rel="noreferrer">
+                Discord
               </a>
             </div>
           </article>
