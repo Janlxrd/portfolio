@@ -3,7 +3,12 @@ import "./globals.css";
 
 export const metadata = {
   title: "Jan's Portfolio",
-  description: "Portfolio site for Jan, a student and full-stack developer from Slovakia."
+  description: "Portfolio site for Jan, a student and full-stack developer from Slovakia.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png"
+  }
 };
 
 export const viewport = {

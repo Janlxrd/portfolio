@@ -452,6 +452,7 @@ export default function Home() {
   const navRef = useRef(null);
   const navLinkRefs = useRef({});
   const pendingSectionRef = useRef(null);
+  const pendingSectionTimeoutRef = useRef(null);
   const lenisRef = useRef(null);
   const currentYear = new Date().getFullYear();
 
@@ -513,6 +514,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 0.78,
       wheelMultiplier: 1.08,
@@ -549,8 +554,21 @@ export default function Home() {
       event.preventDefault();
       pendingSectionRef.current = href.slice(1);
       setActiveSection(href.slice(1));
+
+      if (pendingSectionTimeoutRef.current) {
+        window.clearTimeout(pendingSectionTimeoutRef.current);
+      }
+
+      pendingSectionTimeoutRef.current = window.setTimeout(() => {
+        pendingSectionRef.current = null;
+        pendingSectionTimeoutRef.current = null;
+      }, 900);
+
+      const topbar = document.querySelector(".topbar");
+      const navOffset = topbar ? topbar.getBoundingClientRect().height + 28 : 112;
+
       lenis.scrollTo(target, {
-        offset: -96,
+        offset: -navOffset,
         duration: 0.85
       });
       window.history.replaceState(null, "", href);
@@ -569,6 +587,10 @@ export default function Home() {
       lenis.destroy();
       lenisRef.current = null;
       window.cancelAnimationFrame(frame);
+
+      if (pendingSectionTimeoutRef.current) {
+        window.clearTimeout(pendingSectionTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -643,27 +665,18 @@ export default function Home() {
   useEffect(() => {
     const sectionIds = navItems.map((item) => item.href.slice(1));
     const lastSectionId = sectionIds[sectionIds.length - 1];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    const visibleSections = new Map();
     let frame = 0;
 
     const updateActiveSection = () => {
-      const marker = 132;
       const pendingSection = pendingSectionRef.current;
 
       if (pendingSection) {
-        const pendingElement = document.getElementById(pendingSection);
-
-        if (pendingElement) {
-          const pendingDistance = Math.abs(pendingElement.getBoundingClientRect().top - marker);
-
-          if (pendingDistance > 48) {
-            setActiveSection((current) =>
-              current === pendingSection ? current : pendingSection
-            );
-            return;
-          }
-        }
-
-        pendingSectionRef.current = null;
+        setActiveSection((current) => (current === pendingSection ? current : pendingSection));
+        return;
       }
 
       const pageBottom = window.scrollY + window.innerHeight;
@@ -675,23 +688,41 @@ export default function Home() {
         return;
       }
 
+      const topbar = document.querySelector(".topbar");
+      const marker = topbar ? topbar.getBoundingClientRect().bottom + 24 : 132;
       let nextSection = sectionIds[0];
       let closestDistance = Number.POSITIVE_INFINITY;
 
-      sectionIds.forEach((id) => {
-        const element = document.getElementById(id);
-
-        if (!element) {
+      sections.forEach((element) => {
+        if (!visibleSections.has(element.id)) {
           return;
         }
 
-        const distance = Math.abs(element.getBoundingClientRect().top - marker);
+        const rect = element.getBoundingClientRect();
+        const distance = Math.abs(rect.top - marker);
 
         if (distance < closestDistance) {
           closestDistance = distance;
-          nextSection = id;
+          nextSection = element.id;
         }
       });
+
+      if (!visibleSections.size) {
+        sections.forEach((element) => {
+          const rect = element.getBoundingClientRect();
+
+          if (rect.top - marker > 0) {
+            return;
+          }
+
+          const distance = Math.abs(rect.top - marker);
+
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            nextSection = element.id;
+          }
+        });
+      }
 
       setActiveSection((current) => (current === nextSection ? current : nextSection));
     };
@@ -707,12 +738,35 @@ export default function Home() {
       });
     };
 
+    const topbar = document.querySelector(".topbar");
+    const navOffset = topbar ? topbar.getBoundingClientRect().height + 36 : 140;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleSections.set(entry.target.id, entry);
+            return;
+          }
+
+          visibleSections.delete(entry.target.id);
+        });
+
+        requestUpdate();
+      },
+      {
+        root: null,
+        rootMargin: `-${navOffset}px 0px -45% 0px`,
+        threshold: [0.05, 0.2, 0.45, 0.7]
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
     updateActiveSection();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
 
     return () => {
-      window.removeEventListener("scroll", requestUpdate);
+      observer.disconnect();
       window.removeEventListener("resize", requestUpdate);
       window.cancelAnimationFrame(frame);
     };
@@ -859,6 +913,11 @@ export default function Home() {
       return;
     }
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
     window.scrollTo({
       top: 0,
       behavior: "smooth"
@@ -866,20 +925,31 @@ export default function Home() {
   };
 
   return (
-    <main className="page-shell">
+    <>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+
+      <main className="page-shell relative w-full max-w-full min-h-svh" id="main">
       <CustomCursor />
 
-      <div className="page">
+      <div className="page relative mx-auto w-full max-w-[1080px]">
         <div className="background-glow glow-one" aria-hidden="true" />
         <div className="background-glow glow-two" aria-hidden="true" />
 
-        <header className={`topbar${isNavPinned ? " is-scrolled" : ""}`}>
-          <a className="brand" href="#home">
+        <header
+          className={`topbar sticky z-30 flex w-full items-center justify-between gap-4${isNavPinned ? " is-scrolled" : ""}`}
+        >
+          <a className="brand inline-flex items-center" href="#home">
             <KittyMark />
             jan
           </a>
 
-          <nav className="nav" ref={navRef}>
+          <nav
+            aria-label="Main navigation"
+            className="nav relative flex flex-wrap items-center"
+            ref={navRef}
+          >
             <span
               aria-hidden="true"
               className="nav-indicator"
@@ -901,8 +971,8 @@ export default function Home() {
           </nav>
         </header>
 
-        <section className="hero" id="home">
-          <div className="hero-copy reveal-on-scroll">
+        <section className="hero grid items-start" id="home">
+          <div className="hero-copy reveal-on-scroll flex min-w-0 flex-col items-start">
             <p className="sticker-label">
               <Bow />
               Student and full-stack developer
@@ -916,7 +986,7 @@ export default function Home() {
               websites and learning how things work behind the scenes.
             </p>
 
-            <div className="hero-actions">
+            <div className="hero-actions flex flex-wrap">
               <a className="button button-primary" href="#projects">
                 See my work
               </a>
@@ -926,7 +996,10 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="card hero-note reveal-on-scroll" style={{ "--reveal-delay": "90ms" }}>
+          <aside
+            className="card hero-note reveal-on-scroll min-w-0 justify-self-end"
+            style={{ "--reveal-delay": "90ms" }}
+          >
             <p className="section-label">
               <Sparkle />
               Current focus
@@ -938,7 +1011,7 @@ export default function Home() {
               something.
             </p>
 
-            <div className="note-tags">
+            <div className="note-tags flex flex-wrap">
               <span>School</span>
               <span>Learning</span>
               <span>Improving</span>
@@ -946,13 +1019,13 @@ export default function Home() {
           </aside>
         </section>
 
-        <div className="section-divider" aria-hidden="true">
+        <div className="section-divider grid items-center" aria-hidden="true">
           <span />
           <Bow />
           <span />
         </div>
 
-        <section className="section-grid" id="about">
+        <section className="section-grid grid gap-4" id="about">
           <article className="card about-card reveal-on-scroll">
             <p className="section-label">
               <Heart />
@@ -992,7 +1065,7 @@ export default function Home() {
             <h2>Real projects coming soon.</h2>
           </div>
 
-          <div className="project-grid">
+          <div className="project-grid grid gap-4">
             {featuredProjects.map((project, index) => (
               <div
                 className="project-reveal reveal-on-scroll"
@@ -1001,7 +1074,7 @@ export default function Home() {
               >
                 <article
                   aria-label={`Open ${project.title}`}
-                  className="card project-card"
+                  className="card project-card flex h-full flex-col overflow-hidden"
                   onClick={() => handleProjectOpen(project)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
@@ -1017,7 +1090,7 @@ export default function Home() {
                     <Heart />
                   </div>
 
-                  <div className="project-meta">
+                  <div className="project-meta flex flex-wrap">
                     <span>{project.category}</span>
                     <span>{project.year}</span>
                   </div>
@@ -1025,7 +1098,7 @@ export default function Home() {
                   <h3>{project.title}</h3>
                   <p className="project-description">{project.description}</p>
 
-                  <div className="project-footer">
+                  <div className="project-footer flex flex-wrap">
                     {project.cardActions
                       ? project.cardActions.map((action) => (
                           <ProjectActionLink
@@ -1049,13 +1122,13 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="section-divider" aria-hidden="true">
+        <div className="section-divider grid items-center" aria-hidden="true">
           <span />
           <Sparkle />
           <span />
         </div>
 
-        <section className="bottom-grid">
+        <section className="bottom-grid grid gap-4">
           <article className="card skills-card reveal-on-scroll" id="skills">
             <p className="section-label">
               <Bow />
@@ -1068,7 +1141,7 @@ export default function Home() {
                 <div className="skill-category" key={group.title}>
                   <p className="skill-category-title">{group.title}</p>
 
-                  <div className="skills-wrap">
+                  <div className="skills-wrap flex flex-wrap">
                     {group.items.map((skill) => (
                       <span className="skill-pill" key={skill}>
                         {skill}
@@ -1095,7 +1168,7 @@ export default function Home() {
               just say hi, feel free to reach out.
             </p>
 
-            <div className="contact-links">
+            <div className="contact-links flex flex-wrap">
               <button className="contact-copy" onClick={handleCopyEmail} type="button">
                 <span>{contactEmail}</span>
                 <span className="contact-copy-hint">Tap or click to copy</span>
@@ -1113,24 +1186,27 @@ export default function Home() {
           </article>
         </section>
 
-        <footer className="site-footer reveal-on-scroll" style={{ "--reveal-delay": "120ms" }}>
+        <footer
+          className="site-footer reveal-on-scroll flex justify-between"
+          style={{ "--reveal-delay": "120ms" }}
+        >
           <p>&copy; {currentYear} Jan</p>
           <p>Built with Next.js.</p>
         </footer>
       </div>
 
       {selectedProject ? (
-        <div className="drawer-backdrop" onClick={handleProjectClose}>
+        <div className="drawer-backdrop fixed inset-0 flex justify-end" onClick={handleProjectClose}>
           <aside
             aria-labelledby="project-drawer-title"
             aria-modal="true"
-            className="project-drawer"
+            className="project-drawer overflow-y-auto"
             data-lenis-prevent="true"
             onClick={(event) => event.stopPropagation()}
             role="dialog"
           >
-            <div className="drawer-head">
-              <div className="drawer-meta">
+            <div className="drawer-head flex items-start justify-between">
+              <div className="drawer-meta flex flex-wrap">
                 <span>{selectedProject.category}</span>
                 <span>{selectedProject.year}</span>
               </div>
@@ -1154,7 +1230,7 @@ export default function Home() {
 
             <div className="drawer-section">
               <p className="drawer-section-title">Stack</p>
-              <div className="drawer-pills">
+              <div className="drawer-pills flex flex-wrap">
                 {selectedProject.stack.map((item) => (
                   <span className="tiny-pill" key={item}>
                     {item}
@@ -1164,7 +1240,7 @@ export default function Home() {
             </div>
 
             {selectedProject.liveUrl || selectedProject.codeUrl ? (
-              <div className="drawer-actions">
+              <div className="drawer-actions flex flex-wrap">
                 <ProjectActionLink
                   href={selectedProject.liveUrl}
                   label={selectedProject.liveLabel ?? "Visit site"}
@@ -1194,6 +1270,7 @@ export default function Home() {
       >
         Back to top
       </button>
-    </main>
+      </main>
+    </>
   );
 }
