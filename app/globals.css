@@ -216,8 +216,10 @@ a {
   position: absolute;
   border-radius: 999px;
   pointer-events: none;
-  opacity: 0.2;
+  filter: blur(72px);
+  opacity: 0.38;
   animation: glow-drift 14s ease-in-out infinite alternate;
+  transform: translate3d(0, 0, 0);
 }
 
 .glow-one {
@@ -225,7 +227,7 @@ a {
   left: -8rem;
   width: 22rem;
   height: 22rem;
-  background: rgba(217, 71, 98, 0.24);
+  background: rgba(217, 71, 98, 0.36);
   animation-duration: 15s;
 }
 
@@ -234,7 +236,7 @@ a {
   right: -8rem;
   width: 20rem;
   height: 20rem;
-  background: rgba(255, 212, 220, 0.18);
+  background: rgba(255, 212, 220, 0.26);
   animation-delay: -6s;
 }
 

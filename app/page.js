@@ -1191,7 +1191,7 @@ export default function Home() {
           style={{ "--reveal-delay": "120ms" }}
         >
           <p>&copy; {currentYear} Jan</p>
-          <p>Built with Next.js.</p>
+          <p>Made with ❤️ by Jan in Next.js.</p>
         </footer>
       </div>
 
