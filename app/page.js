@@ -11,18 +11,9 @@ const featuredProjects = [
   {
     title: "Vantix",
     category: "Discord bot",
-    year: "Private",
-    description:
-      "A closed-source multi-purpose Discord bot.",
-    overview:
-      "Vantix is a multi-purpose Discord bot built for public use. The code is closed source, but the website is live and the bot can be invited through Discord.",
-    stack: ["TypeScript", "discord.js", "PostgreSQL", "Prisma", "Redis", "Express", "Docker"],
-    highlights: [
-      "Multi-purpose Discord bot",
-      "Built for public use",
-      "Live website and invite link"
-    ],
-    cardActions: [
+    status: "Live",
+    description: "A multi-purpose Discord bot built for public use.",
+    actions: [
       {
         href: "https://vantix.jano.eu.org",
         label: "Website",
@@ -33,46 +24,19 @@ const featuredProjects = [
           "https://discord.com/oauth2/authorize?client_id=1495397495868756058&scope=bot+applications.commands&integration_type=0&permissions=1237219405014",
         label: "Invite to Discord"
       }
-    ],
-    liveUrl: "https://vantix.jano.eu.org",
-    liveLabel: "Website",
-    codeUrl:
-      "https://discord.com/oauth2/authorize?client_id=1495397495868756058&scope=bot+applications.commands&integration_type=0&permissions=1237219405014",
-    codeLabel: "Invite to Discord"
+    ]
   },
   {
-    title: "Another project on the way",
-    category: "Coming soon",
-    year: "Soon",
-    description:
-      "This card is saving a spot for another project I'll add once it's ready to share.",
-    overview:
-      "Once I have more work online, this section will show the idea behind the project, the tools I used, and the parts I'm most proud of.",
-    stack: ["Idea", "Build", "Takeaways"],
-    highlights: [
-      "The main goal",
-      "Key features or decisions",
-      "What changed while I built it"
-    ],
-    liveUrl: null,
-    codeUrl: null
+    title: "Coming soon",
+    category: "Project",
+    status: "Coming soon",
+    description: "Another project card will go here later."
   },
   {
-    title: "More work soon",
-    category: "Coming soon",
-    year: "Soon",
-    description:
-      "I'll use this space for another project, with a simple breakdown of the work and the outcome.",
-    overview:
-      "This placeholder will turn into a full project summary with the context, the build process, and the final result.",
-    stack: ["Context", "Process", "Outcome"],
-    highlights: [
-      "Why I built it",
-      "How I put it together",
-      "What the final result was"
-    ],
-    liveUrl: null,
-    codeUrl: null
+    title: "Coming soon",
+    category: "Project",
+    status: "Coming soon",
+    description: "This space is for something I build next."
   }
 ];
 
@@ -184,37 +148,6 @@ function Apple() {
         <span />
       </span>
     </span>
-  );
-}
-
-function ProjectActionLink({
-  href,
-  label,
-  compact = false,
-  primary = false,
-  stopPropagation = false
-}) {
-  const className =
-    `project-action${compact ? " is-compact" : ""}${primary ? " project-action-primary" : ""}${href ? "" : " is-disabled"}`;
-
-  if (!href) {
-    return (
-      <span aria-disabled="true" className={className}>
-        {label}
-      </span>
-    );
-  }
-
-  return (
-    <a
-      className={className}
-      href={href}
-      onClick={stopPropagation ? (event) => event.stopPropagation() : undefined}
-      rel="noreferrer"
-      target="_blank"
-    >
-      {label}
-    </a>
   );
 }
 
@@ -446,7 +379,6 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState("about");
   const [isNavPinned, setIsNavPinned] = useState(false);
   const [navIndicatorStyle, setNavIndicatorStyle] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const navRef = useRef(null);
@@ -593,26 +525,6 @@ export default function Home() {
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (!selectedProject) {
-      return;
-    }
-
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        setSelectedProject(null);
-      }
-    };
-
-    lenisRef.current?.stop();
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      lenisRef.current?.start();
-    };
-  }, [selectedProject]);
 
   useEffect(() => {
     if (!toastMessage) {
@@ -869,14 +781,6 @@ export default function Home() {
     };
   }, [activeSection]);
 
-  const handleProjectOpen = (project) => {
-    setSelectedProject(project);
-  };
-
-  const handleProjectClose = () => {
-    setSelectedProject(null);
-  };
-
   const handleCopyEmail = async () => {
     const fallbackCopy = () => {
       const textArea = document.createElement("textarea");
@@ -1073,17 +977,7 @@ export default function Home() {
                 style={{ "--reveal-delay": `${index * 90}ms` }}
               >
                 <article
-                  aria-label={`Open ${project.title}`}
                   className="card project-card flex h-full flex-col overflow-hidden"
-                  onClick={() => handleProjectOpen(project)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      handleProjectOpen(project);
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
                 >
                   <div className="project-tape" aria-hidden="true" />
                   <div className="project-pin" aria-hidden="true">
@@ -1092,29 +986,26 @@ export default function Home() {
 
                   <div className="project-meta flex flex-wrap">
                     <span>{project.category}</span>
-                    <span>{project.year}</span>
+                    <span>{project.status}</span>
                   </div>
 
                   <h3>{project.title}</h3>
                   <p className="project-description">{project.description}</p>
 
                   <div className="project-footer flex flex-wrap">
-                    {project.cardActions
-                      ? project.cardActions.map((action) => (
-                          <ProjectActionLink
-                            compact
+                    {project.actions
+                      ? project.actions.map((action) => (
+                          <a
+                            className={`project-action is-compact${action.primary ? " project-action-primary" : ""}`}
                             href={action.href}
                             key={action.label}
-                            label={action.label}
-                            primary={action.primary}
-                            stopPropagation
-                          />
+                            rel="noreferrer"
+                            target="_blank"
+                          >
+                            {action.label}
+                          </a>
                         ))
-                      : (project.footerTags ?? ["Coming soon", "Work in progress"]).map((tag) => (
-                          <span className="tiny-pill" key={tag}>
-                            {tag}
-                          </span>
-                        ))}
+                      : <span className="tiny-pill">Coming soon</span>}
                   </div>
                 </article>
               </div>
@@ -1194,66 +1085,6 @@ export default function Home() {
           <p>Made with ❤️ by Jan in Next.js.</p>
         </footer>
       </div>
-
-      {selectedProject ? (
-        <div className="drawer-backdrop fixed inset-0 flex justify-end" onClick={handleProjectClose}>
-          <aside
-            aria-labelledby="project-drawer-title"
-            aria-modal="true"
-            className="project-drawer overflow-y-auto"
-            data-lenis-prevent="true"
-            onClick={(event) => event.stopPropagation()}
-            role="dialog"
-          >
-            <div className="drawer-head flex items-start justify-between">
-              <div className="drawer-meta flex flex-wrap">
-                <span>{selectedProject.category}</span>
-                <span>{selectedProject.year}</span>
-              </div>
-
-              <button className="drawer-close" onClick={handleProjectClose} type="button">
-                Close
-              </button>
-            </div>
-
-            <h2 id="project-drawer-title">{selectedProject.title}</h2>
-            <p className="drawer-description">{selectedProject.overview}</p>
-
-            <div className="drawer-section">
-              <p className="drawer-section-title">Highlights</p>
-              <ul className="drawer-list">
-                {selectedProject.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="drawer-section">
-              <p className="drawer-section-title">Stack</p>
-              <div className="drawer-pills flex flex-wrap">
-                {selectedProject.stack.map((item) => (
-                  <span className="tiny-pill" key={item}>
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {selectedProject.liveUrl || selectedProject.codeUrl ? (
-              <div className="drawer-actions flex flex-wrap">
-                <ProjectActionLink
-                  href={selectedProject.liveUrl}
-                  label={selectedProject.liveLabel ?? "Visit site"}
-                />
-                <ProjectActionLink
-                  href={selectedProject.codeUrl}
-                  label={selectedProject.codeLabel ?? "View code"}
-                />
-              </div>
-            ) : null}
-          </aside>
-        </div>
-      ) : null}
 
       <div
         aria-live="polite"
