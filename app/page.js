@@ -1187,7 +1187,7 @@ export default function Home() {
         </section>
 
         <footer
-          className="site-footer reveal-on-scroll flex justify-between"
+          className="site-footer reveal-on-scroll flex flex-col items-center justify-center text-center"
           style={{ "--reveal-delay": "120ms" }}
         >
           <p>&copy; {currentYear} Jan</p>
