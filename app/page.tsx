@@ -993,7 +993,7 @@ export default function Home() {
               <Sparkle />
               Projects
             </p>
-            <h2>Real projects coming soon.</h2>
+            <h2>My work.</h2>
           </div>
 
           <div className="project-grid grid gap-4">
