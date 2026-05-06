@@ -1,13 +1,40 @@
 "use client";
 
 import Lenis from "lenis";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
+
+type ProjectAction = {
+  href: string;
+  label: string;
+  primary?: boolean;
+};
+
+type FeaturedProject = {
+  title: string;
+  category: string;
+  status: string;
+  description: string;
+  actions?: ProjectAction[];
+};
+
+type SkillGroup = {
+  title: string;
+  items: string[];
+};
+
+type NavItem = {
+  href: `#${string}`;
+  label: string;
+};
+
+const revealDelay = (value: string): CSSProperties =>
+  ({ "--reveal-delay": value }) as CSSProperties;
 
 const contactEmail = "contact@jano.eu.org";
 const birthDate = { year: 2007, month: 7, day: 12 };
 const birthTimeZone = "Europe/Bratislava";
 
-const featuredProjects = [
+const featuredProjects: FeaturedProject[] = [
   {
     title: "Vantix",
     category: "Discord bot",
@@ -40,7 +67,7 @@ const featuredProjects = [
   }
 ];
 
-const skillGroups = [
+const skillGroups: SkillGroup[] = [
   {
     title: "Coding",
     items: ["Python", "TypeScript", "Express"]
@@ -59,14 +86,14 @@ const skillGroups = [
   }
 ];
 
-const navItems = [
+const navItems: NavItem[] = [
   { href: "#about", label: "About" },
   { href: "#projects", label: "Projects" },
   { href: "#skills", label: "Skills" },
   { href: "#contact", label: "Contact" }
 ];
 
-function getCurrentAge() {
+function getCurrentAge(): number {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: birthTimeZone,
     year: "numeric",
@@ -152,8 +179,8 @@ function Apple() {
 }
 
 function CustomCursor() {
-  const outerRef = useRef(null);
-  const innerRef = useRef(null);
+  const outerRef = useRef<HTMLDivElement | null>(null);
+  const innerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -205,7 +232,7 @@ function CustomCursor() {
       inner.style.opacity = "0";
     };
 
-    const handleMove = (event) => {
+    const handleMove = (event: PointerEvent) => {
       if (event.pointerType && event.pointerType !== "mouse") {
         return;
       }
@@ -222,7 +249,7 @@ function CustomCursor() {
       state.mouseY = event.clientY;
     };
 
-    const handlePointerDown = (event) => {
+    const handlePointerDown = (event: PointerEvent) => {
       if (event.pointerType && event.pointerType !== "mouse") {
         return;
       }
@@ -293,7 +320,7 @@ function CustomCursor() {
     };
 
     document.documentElement.addEventListener("pointermove", handleMove);
-    document.documentElement.addEventListener("pointerrawupdate", handleMove);
+    document.documentElement.addEventListener("pointerrawupdate", handleMove as EventListener);
     window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("pointerup", handleUp);
     window.addEventListener("pointercancel", handleUp);
@@ -305,7 +332,7 @@ function CustomCursor() {
     return () => {
       window.cancelAnimationFrame(state.frame);
       document.documentElement.removeEventListener("pointermove", handleMove);
-      document.documentElement.removeEventListener("pointerrawupdate", handleMove);
+      document.documentElement.removeEventListener("pointerrawupdate", handleMove as EventListener);
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointerup", handleUp);
       window.removeEventListener("pointercancel", handleUp);
@@ -378,14 +405,14 @@ export default function Home() {
   const [age, setAge] = useState(() => getCurrentAge());
   const [activeSection, setActiveSection] = useState("about");
   const [isNavPinned, setIsNavPinned] = useState(false);
-  const [navIndicatorStyle, setNavIndicatorStyle] = useState(null);
+  const [navIndicatorStyle, setNavIndicatorStyle] = useState<CSSProperties | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const navRef = useRef(null);
-  const navLinkRefs = useRef({});
-  const pendingSectionRef = useRef(null);
-  const pendingSectionTimeoutRef = useRef(null);
-  const lenisRef = useRef(null);
+  const navRef = useRef<HTMLElement | null>(null);
+  const navLinkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const pendingSectionRef = useRef<string | null>(null);
+  const pendingSectionTimeoutRef = useRef<number | null>(null);
+  const lenisRef = useRef<Lenis | null>(null);
   const currentYear = new Date().getFullYear();
 
   useLayoutEffect(() => {
@@ -420,7 +447,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const handleContextMenu = (event) => {
+    const handleContextMenu = (event: MouseEvent) => {
       event.preventDefault();
     };
 
@@ -461,7 +488,7 @@ export default function Home() {
 
     let frame = 0;
 
-    const handleAnchorClick = (event) => {
+    const handleAnchorClick = (event: MouseEvent) => {
       const trigger =
         event.target instanceof Element
           ? event.target.closest('a[href^="#"]')
@@ -499,14 +526,14 @@ export default function Home() {
       const topbar = document.querySelector(".topbar");
       const navOffset = topbar ? topbar.getBoundingClientRect().height + 28 : 112;
 
-      lenis.scrollTo(target, {
+      lenis.scrollTo(target as HTMLElement, {
         offset: -navOffset,
         duration: 0.85
       });
       window.history.replaceState(null, "", href);
     };
 
-    const animateScroll = (time) => {
+    const animateScroll = (time: number) => {
       lenis.raf(time);
       frame = window.requestAnimationFrame(animateScroll);
     };
@@ -541,7 +568,7 @@ export default function Home() {
   }, [toastMessage]);
 
   useEffect(() => {
-    const elements = document.querySelectorAll(".reveal-on-scroll");
+    const elements = document.querySelectorAll<HTMLElement>(".reveal-on-scroll");
     let startFrame = 0;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -579,8 +606,8 @@ export default function Home() {
     const lastSectionId = sectionIds[sectionIds.length - 1];
     const sections = sectionIds
       .map((id) => document.getElementById(id))
-      .filter(Boolean);
-    const visibleSections = new Map();
+      .filter((section): section is HTMLElement => Boolean(section));
+    const visibleSections = new Map<string, IntersectionObserverEntry>();
     let frame = 0;
 
     const updateActiveSection = () => {
@@ -902,7 +929,7 @@ export default function Home() {
 
           <aside
             className="card hero-note reveal-on-scroll min-w-0 justify-self-end"
-            style={{ "--reveal-delay": "90ms" }}
+            style={revealDelay("90ms")}
           >
             <p className="section-label">
               <Sparkle />
@@ -945,7 +972,7 @@ export default function Home() {
             </p>
           </article>
 
-          <aside className="card details-card reveal-on-scroll" style={{ "--reveal-delay": "80ms" }}>
+          <aside className="card details-card reveal-on-scroll" style={revealDelay("80ms")}>
             <p className="section-label">
               <Apple />
               At a glance
@@ -974,7 +1001,7 @@ export default function Home() {
               <div
                 className="project-reveal reveal-on-scroll"
                 key={project.title}
-                style={{ "--reveal-delay": `${index * 90}ms` }}
+                style={revealDelay(`${index * 90}ms`)}
               >
                 <article
                   className="card project-card flex h-full flex-col overflow-hidden"
@@ -1047,7 +1074,7 @@ export default function Home() {
           <article
             className="card contact-card reveal-on-scroll"
             id="contact"
-            style={{ "--reveal-delay": "80ms" }}
+            style={revealDelay("80ms")}
           >
             <p className="section-label">
               <Heart />
@@ -1079,7 +1106,7 @@ export default function Home() {
 
         <footer
           className="site-footer reveal-on-scroll flex flex-col items-center justify-center text-center"
-          style={{ "--reveal-delay": "120ms" }}
+          style={revealDelay("120ms")}
         >
           <p>&copy; {currentYear} Jan</p>
           <p>Made with ❤️ by Jan in Next.js.</p>
