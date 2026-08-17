@@ -1091,7 +1091,7 @@ export default function Home() {
                 <span>{contactEmail}</span>
                 <span className="contact-copy-hint">Tap or click to copy</span>
               </button>
-              <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
+              <a href="https://github.com/" target="_blank" rel="noreferrer">
                 GitHub
               </a>
               <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
