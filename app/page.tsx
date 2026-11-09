@@ -1536,12 +1536,32 @@ export default function Home() {
                 </p>
               </div>
 
+<<<<<<< HEAD
               <div className="contact-actions">
                 <button className="contact-copy" onClick={handleCopyEmail} type="button">
                   <span className="contact-copy-label">Email</span>
                   <span className="contact-copy-email">{contactEmail}</span>
                   <span className="contact-copy-hint">Tap or click to copy</span>
                 </button>
+=======
+            <div className="contact-links flex flex-wrap">
+              <button className="contact-copy" onClick={handleCopyEmail} type="button">
+                <span>{contactEmail}</span>
+                <span className="contact-copy-hint">Tap or click to copy</span>
+              </button>
+              <a href="https://github.com/" target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+              <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
+                Instagram
+              </a>
+              <a href="https://discord.com/" target="_blank" rel="noreferrer">
+                Discord
+              </a>
+            </div>
+          </article>
+        </section>
+>>>>>>> 04b0592b9dfa329e4d7cd2e8314f88831d4e0518
 
                 <div className="contact-links">
                   <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
