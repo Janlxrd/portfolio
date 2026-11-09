@@ -14,12 +14,32 @@ type FeaturedProject = {
   category: string;
   status: string;
   description: string;
+  tech?: string[];
+  highlights?: string[];
   actions?: ProjectAction[];
+};
+
+type SkillIconName =
+  | "python"
+  | "typescript"
+  | "express"
+  | "postgres"
+  | "prisma"
+  | "redis"
+  | "docker"
+  | "language";
+
+type SkillItem = {
+  name: string;
+  detail: string;
+  icon: SkillIconName;
+  mark?: string;
 };
 
 type SkillGroup = {
   title: string;
-  items: string[];
+  summary: string;
+  items: SkillItem[];
 };
 
 type NavItem = {
@@ -33,13 +53,19 @@ const revealDelay = (value: string): CSSProperties =>
 const contactEmail = "contact@jano.eu.org";
 const birthDate = { year: 2007, month: 7, day: 12 };
 const birthTimeZone = "Europe/Bratislava";
+const morphTitleText = "Hello, I'm Jan.";
+const scrambleCharacters = "!<>-_\\/[]{}=+*^?#";
+const heroRoles = ["student", "back-end learner", "full-stack developer", "Python enjoyer"] as const;
 
 const featuredProjects: FeaturedProject[] = [
   {
     title: "Vantix",
     category: "Discord bot",
     status: "Live",
-    description: "A multi-purpose Discord bot built for public use.",
+    description:
+      "A public multi-purpose Discord bot with a dedicated website and invite flow.",
+    tech: ["Discord API", "TypeScript", "Slash commands", "Public bot"],
+    highlights: ["Live website", "Server invite flow", "Built for public use"],
     actions: [
       {
         href: "https://vantix.jano.eu.org",
@@ -70,19 +96,36 @@ const featuredProjects: FeaturedProject[] = [
 const skillGroups: SkillGroup[] = [
   {
     title: "Coding",
-    items: ["Python", "TypeScript", "Express"]
+    summary: "Languages and app code I reach for most.",
+    items: [
+      { name: "Python", detail: "Favorite language", icon: "python" },
+      { name: "TypeScript", detail: "Typed web apps", icon: "typescript" },
+      { name: "Express", detail: "API routes and services", icon: "express" }
+    ]
   },
   {
     title: "Databases",
-    items: ["PostgreSQL", "Prisma", "Redis"]
+    summary: "Storage, schema work, and fast data paths.",
+    items: [
+      { name: "PostgreSQL", detail: "Relational data", icon: "postgres" },
+      { name: "Prisma", detail: "Typed database access", icon: "prisma" },
+      { name: "Redis", detail: "Caching and queues", icon: "redis" }
+    ]
   },
   {
     title: "Tools",
-    items: ["Docker"]
+    summary: "Shipping and running projects cleanly.",
+    items: [{ name: "Docker", detail: "Containers and local stacks", icon: "docker" }]
   },
   {
     title: "Languages",
-    items: ["Slovak", "English", "Spanish (a little)", "German (a little)"]
+    summary: "Human languages I use or study.",
+    items: [
+      { name: "Slovak", detail: "Native", icon: "language", mark: "SK" },
+      { name: "English", detail: "Comfortable", icon: "language", mark: "EN" },
+      { name: "Spanish", detail: "A little", icon: "language", mark: "ES" },
+      { name: "German", detail: "A little", icon: "language", mark: "DE" }
+    ]
   }
 ];
 
@@ -175,6 +218,146 @@ function Apple() {
         <span />
       </span>
     </span>
+  );
+}
+
+function ArrowIcon({ direction = "external" }: { direction?: "external" | "up" | "down" }) {
+  const rotation = direction === "up" ? -90 : direction === "down" ? 90 : -45;
+
+  return (
+    <svg
+      className="arrow-icon"
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      focusable="false"
+      style={{ transform: `rotate(${rotation}deg)` }}
+    >
+      <path
+        d="M3 8h10M9 4l4 4-4 4"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+      />
+    </svg>
+  );
+}
+
+function SectionHeading({ index, label, title }: { index: string; label: string; title: string }) {
+  return (
+    <div className="section-heading reveal-on-scroll">
+      <p className="eyebrow">
+        <span className="eyebrow-index">{index}</span>
+        <Sparkle />
+        {label}
+      </p>
+      <h2>{title}</h2>
+    </div>
+  );
+}
+
+function SkillIcon({ name, mark }: { name: SkillIconName; mark?: string }) {
+  if (name === "language") {
+    return <span className="skill-icon-mark">{mark}</span>;
+  }
+
+  if (name === "python") {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path
+          d="M9 5.8C9 3.7 10.7 2 12.8 2h5.7C20.4 2 22 3.6 22 5.5V10h-7.7c-2.9 0-5.3 2.4-5.3 5.3v1.2H5.5C3.6 16.5 2 14.9 2 13V9.7C2 7.5 3.7 5.8 5.9 5.8H9Z"
+          fill="currentColor"
+          opacity="0.88"
+        />
+        <path
+          d="M23 26.2c0 2.1-1.7 3.8-3.8 3.8h-5.7C11.6 30 10 28.4 10 26.5V22h7.7c2.9 0 5.3-2.4 5.3-5.3v-1.2h3.5c1.9 0 3.5 1.6 3.5 3.5v3.3c0 2.2-1.7 3.9-3.9 3.9H23Z"
+          fill="currentColor"
+          opacity="0.55"
+        />
+        <circle cx="13" cy="6.8" r="1.1" fill="#fff7fa" />
+        <circle cx="19" cy="25.2" r="1.1" fill="#fff7fa" />
+      </svg>
+    );
+  }
+
+  if (name === "typescript") {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <rect x="4" y="4" width="24" height="24" rx="4" fill="currentColor" />
+        <path
+          d="M9 12.2h8.2v2.3h-2.8v8.1h-2.6v-8.1H9v-2.3Zm9 8.8 1.4-1.7c.7.6 1.5 1 2.4 1 .8 0 1.3-.3 1.3-.9 0-.5-.4-.8-1.7-1.3-1.8-.7-3-1.5-3-3.2 0-1.9 1.5-3 3.7-3 1.5 0 2.7.5 3.6 1.3l-1.3 1.8c-.7-.5-1.4-.8-2.2-.8-.7 0-1.1.3-1.1.8 0 .6.5.8 1.9 1.4 1.9.7 2.8 1.6 2.8 3.1 0 2-1.5 3.2-4 3.2-1.6 0-3-.6-3.8-1.7Z"
+          fill="#fff7fa"
+        />
+      </svg>
+    );
+  }
+
+  if (name === "express") {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <rect x="4" y="5" width="24" height="22" rx="5" fill="currentColor" opacity="0.14" />
+        <path
+          d="M8 22V10h14.7v2.5H11v2.2h10.5v2.4H11v2.4h12v2.5H8Zm16.2 0-3.4-4.3 3.3-4.1h-3.2l-1.7 2.2-1.7-2.2h-3.3l3.4 4.2-3.4 4.2h3.2l1.8-2.3 1.8 2.3h3.2Z"
+          fill="currentColor"
+        />
+      </svg>
+    );
+  }
+
+  if (name === "postgres") {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <ellipse cx="16" cy="8" rx="9.5" ry="4.5" fill="currentColor" opacity="0.86" />
+        <path
+          d="M6.5 8v10c0 2.5 4.3 4.5 9.5 4.5s9.5-2 9.5-4.5V8"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.2"
+        />
+        <path
+          d="M6.5 13c0 2.5 4.3 4.5 9.5 4.5s9.5-2 9.5-4.5"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth="1.8"
+          opacity="0.65"
+        />
+      </svg>
+    );
+  }
+
+  if (name === "prisma") {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path
+          d="M17.2 3.5 6.2 24.1c-.8 1.5.5 3.2 2.1 2.8l15.5-4.5c1.5-.4 2.1-2.2 1.2-3.5L19.7 4c-.6-1.3-1.9-1.5-2.5-.5Zm.7 5.7 4.1 10.5-10.1 3 6-13.5Z"
+          fill="currentColor"
+        />
+      </svg>
+    );
+  }
+
+  if (name === "redis") {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M5 11.5 16 6l11 5.5L16 17 5 11.5Z" fill="currentColor" />
+        <path d="M5 16.2 16 21.8l11-5.6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" opacity="0.78" />
+        <path d="M5 20.8 16 26.4l11-5.6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" opacity="0.5" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path
+        d="M10 9h4v4h-4V9Zm5 0h4v4h-4V9Zm5 0h4v4h-4V9ZM7 14h4v4H7v-4Zm5 0h4v4h-4v-4Zm5 0h4v4h-4v-4Zm5 0h4v4h-4v-4ZM5 19h22c-.6 4.2-3.9 7-8.5 7h-5C8.9 26 5.6 23.2 5 19Z"
+        fill="currentColor"
+      />
+      <path d="M24.5 17.5c1.5 0 2.8-1.1 3.1-2.5 1.2.7 1.9 1.9 2.1 3.4-1.4.3-2.8 0-4-.9h-1.2Z" fill="currentColor" opacity="0.6" />
+    </svg>
   );
 }
 
@@ -349,55 +532,201 @@ function CustomCursor() {
   );
 }
 
-function TypewriterTitle() {
-  const fullText = "Hey, I'm Jan.";
-  const [typedText, setTypedText] = useState("");
-  const words = typedText.split(" ");
-  const endsWithSpace = typedText.endsWith(" ");
+type MorphGlyph = {
+  char: string;
+  resolved: boolean;
+  active: boolean;
+};
+
+const createHiddenGlyphs = (text: string): MorphGlyph[] =>
+  text.split("").map((char) => ({
+    char: char === " " ? " " : "",
+    resolved: char === " ",
+    active: false
+  }));
+
+function MorphingTitle() {
+  const [glyphs, setGlyphs] = useState<MorphGlyph[]>(() =>
+    createHiddenGlyphs(morphTitleText)
+  );
+  const [animationComplete, setAnimationComplete] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setTypedText(fullText);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducedMotion) {
+      setGlyphs(
+        morphTitleText.split("").map((char) => ({
+          char,
+          resolved: true,
+          active: false
+        }))
+      );
+      setAnimationComplete(true);
       return;
     }
 
-    let index = 0;
-    const timer = window.setInterval(() => {
-      index += 1;
-      setTypedText(fullText.slice(0, index));
+    const timeouts: number[] = [];
+    const intervals: number[] = [];
 
-      if (index >= fullText.length) {
-        window.clearInterval(timer);
-      }
-    }, 95);
+    morphTitleText.split("").forEach((targetChar, index, letters) => {
+      const timeout = window.setTimeout(() => {
+        if (targetChar === " ") {
+          setGlyphs((current) => {
+            const next = [...current];
+            next[index] = { char: " ", resolved: true, active: false };
+            return next;
+          });
+          return;
+        }
+
+        let iteration = 0;
+        const interval = window.setInterval(() => {
+          iteration += 1;
+          const isResolved = iteration > 8;
+
+          setGlyphs((current) => {
+            const next = [...current];
+            next[index] = {
+              char: isResolved
+                ? targetChar
+                : scrambleCharacters[
+                    Math.floor(Math.random() * scrambleCharacters.length)
+                  ],
+              resolved: isResolved,
+              active: !isResolved
+            };
+            return next;
+          });
+
+          if (isResolved) {
+            window.clearInterval(interval);
+
+            if (index === letters.length - 1) {
+              setAnimationComplete(true);
+            }
+          }
+        }, 44);
+
+        intervals.push(interval);
+      }, 160 + index * 78);
+
+      timeouts.push(timeout);
+    });
 
     return () => {
-      window.clearInterval(timer);
+      timeouts.forEach((timeout) => window.clearTimeout(timeout));
+      intervals.forEach((interval) => window.clearInterval(interval));
     };
   }, []);
 
-  return (
-    <h1 aria-label={fullText} className="type-title">
-      <span aria-hidden="true" className="type-title-line">
-        {words.map((word, index) => {
-          if (!word) {
-            return null;
-          }
+  const words = morphTitleText.split(" ");
+  let charOffset = 0;
 
-          const hasTrailingSpace = index < words.length - 1 || endsWithSpace;
+  return (
+    <h1 aria-label={morphTitleText} className="morph-title">
+      <span aria-hidden="true" className="morph-title-line">
+        {words.map((word, wordIndex) => {
+          const start = charOffset;
+          charOffset += word.length + 1;
+          const isLastWord = wordIndex === words.length - 1;
 
           return (
             <span
-              className={`type-title-word${hasTrailingSpace ? " is-spaced" : ""}`}
-              key={`${word}-${index}`}
+              className={`morph-word${isLastWord ? " is-accent" : ""}`}
+              key={`${word}-${wordIndex}`}
             >
-              {word}
+              {word.split("").map((targetChar, letterIndex) => {
+                const glyph = glyphs[start + letterIndex];
+
+                return (
+                  <span
+                    className={[
+                      "morph-title-char",
+                      glyph.active ? "is-scrambling" : "",
+                      glyph.resolved ? "is-resolved" : ""
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    key={`${targetChar}-${letterIndex}`}
+                  >
+                    <span className="morph-ghost">{targetChar}</span>
+                    <span className="morph-live">{glyph.char}</span>
+                  </span>
+                );
+              })}
+              {isLastWord ? (
+                <span
+                  className={`typing-cursor${animationComplete ? " is-settled" : ""}`}
+                  aria-hidden="true"
+                />
+              ) : null}
             </span>
           );
         })}
-        <span className="typing-cursor" aria-hidden="true" />
       </span>
     </h1>
+  );
+}
+
+function RoleCarousel() {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducedMotion) {
+      setDisplayText(heroRoles[0]);
+      return;
+    }
+
+    const currentRole = heroRoles[roleIndex];
+    let timeout = 0;
+
+    if (phase === "typing") {
+      if (displayText.length < currentRole.length) {
+        timeout = window.setTimeout(() => {
+          setDisplayText(currentRole.slice(0, displayText.length + 1));
+        }, 72);
+      } else {
+        timeout = window.setTimeout(() => {
+          setPhase("pause");
+        }, 420);
+      }
+    }
+
+    if (phase === "pause") {
+      timeout = window.setTimeout(() => {
+        setPhase("deleting");
+      }, 1550);
+    }
+
+    if (phase === "deleting") {
+      if (displayText.length > 0) {
+        timeout = window.setTimeout(() => {
+          setDisplayText((current) => current.slice(0, -1));
+        }, 38);
+      } else {
+        setPhase("typing");
+        setRoleIndex((current) => (current + 1) % heroRoles.length);
+      }
+    }
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [displayText, phase, roleIndex]);
+
+  return (
+    <p className="hero-role-line" aria-label={`I am a ${heroRoles[roleIndex]}.`}>
+      <span>I am a</span>
+      <span className="role-carousel" aria-hidden="true">
+        {displayText || "\u00A0"}
+        <span className="role-cursor" aria-hidden="true" />
+      </span>
+    </p>
   );
 }
 
@@ -413,7 +742,68 @@ export default function Home() {
   const pendingSectionRef = useRef<string | null>(null);
   const pendingSectionTimeoutRef = useRef<number | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
+  const progressRef = useRef<HTMLDivElement | null>(null);
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const bar = progressRef.current;
+
+    if (!bar) {
+      return;
+    }
+
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      bar.style.transform = `scaleX(${progress})`;
+    };
+
+    const requestUpdate = () => {
+      if (!frame) {
+        frame = window.requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!window.matchMedia("(pointer: fine)").matches) {
+      return;
+    }
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const card =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>(".spotlight")
+          : null;
+
+      if (!card) {
+        return;
+      }
+
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+      card.style.setProperty("--my", `${event.clientY - rect.top}px`);
+    };
+
+    document.addEventListener("pointermove", handlePointerMove, { passive: true });
+
+    return () => {
+      document.removeEventListener("pointermove", handlePointerMove);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const canManageRestoration = "scrollRestoration" in window.history;
@@ -861,273 +1251,338 @@ export default function Home() {
         Skip to content
       </a>
 
-      <main className="page-shell relative w-full max-w-full min-h-svh" id="main">
-      <CustomCursor />
+      <div className="scroll-progress" aria-hidden="true">
+        <div className="scroll-progress-bar" ref={progressRef} />
+      </div>
 
-      <div className="page relative mx-auto w-full max-w-[1080px]">
-        <div className="background-glow glow-one" aria-hidden="true" />
-        <div className="background-glow glow-two" aria-hidden="true" />
+      <div className="backdrop" aria-hidden="true">
+        <div className="backdrop-grid" />
+        <div className="background-glow glow-one" />
+        <div className="background-glow glow-two" />
+        <div className="background-glow glow-three" />
+      </div>
 
-        <header
-          className={`topbar sticky z-30 flex w-full items-center justify-between gap-4${isNavPinned ? " is-scrolled" : ""}`}
-        >
-          <a className="brand inline-flex items-center" href="#home">
-            <KittyMark />
-            jan
-          </a>
+      <main className="page-shell" id="main">
+        <CustomCursor />
 
-          <nav
-            aria-label="Main navigation"
-            className="nav relative flex flex-wrap items-center"
-            ref={navRef}
-          >
-            <span
-              aria-hidden="true"
-              className="nav-indicator"
-              style={navIndicatorStyle ?? undefined}
-            />
-            {navItems.map((item) => (
-              <a
-                aria-current={activeSection === item.href.slice(1) ? "page" : undefined}
-                className={activeSection === item.href.slice(1) ? "is-active" : undefined}
-                href={item.href}
-                key={item.href}
-                ref={(node) => {
-                  navLinkRefs.current[item.href.slice(1)] = node;
-                }}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+        <header className={`topbar${isNavPinned ? " is-scrolled" : ""}`}>
+          <div className="topbar-inner">
+            <a className="brand" href="#home">
+              <KittyMark />
+              <span>jan</span>
+            </a>
+
+            <nav aria-label="Main navigation" className="nav" ref={navRef}>
+              <span
+                aria-hidden="true"
+                className="nav-indicator"
+                style={navIndicatorStyle ?? undefined}
+              />
+              {navItems.map((item) => (
+                <a
+                  aria-current={activeSection === item.href.slice(1) ? "page" : undefined}
+                  className={activeSection === item.href.slice(1) ? "is-active" : undefined}
+                  href={item.href}
+                  key={item.href}
+                  ref={(node) => {
+                    navLinkRefs.current[item.href.slice(1)] = node;
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
         </header>
 
-        <section className="hero grid items-start" id="home">
-          <div className="hero-copy reveal-on-scroll flex min-w-0 flex-col items-start">
-            <p className="sticker-label">
-              <Bow />
-              Student and full-stack developer
-            </p>
+        <div className="page">
+          <section className="hero" id="home">
+            <div className="hero-copy reveal-on-scroll">
+              <p className="status-pill">
+                <span className="status-dot" aria-hidden="true" />
+                Student and full-stack developer
+              </p>
 
-            <TypewriterTitle />
+              <MorphingTitle />
 
-            <p className="hero-text">
-              I&apos;m Jan, an <span suppressHydrationWarning>{age}</span>-year-old
-              student from Slovakia who likes building clear, thoughtful
-              websites and learning how things work behind the scenes.
-            </p>
+              <RoleCarousel />
 
-            <div className="hero-actions flex flex-wrap">
-              <a className="button button-primary" href="#projects">
-                See my work
-              </a>
-              <a className="button button-secondary" href="mailto:contact@jano.eu.org">
-                Get in touch
-              </a>
-            </div>
-          </div>
+              <p className="hero-text">
+                I&apos;m Jan, an <span suppressHydrationWarning>{age}</span>-year-old
+                student from Slovakia who likes building clear, thoughtful
+                websites and learning how things work behind the scenes.
+              </p>
 
-          <aside
-            className="card hero-note reveal-on-scroll min-w-0 justify-self-end"
-            style={revealDelay("90ms")}
-          >
-            <p className="section-label">
-              <Sparkle />
-              Current focus
-            </p>
-            <h2>Focused on school and steady progress.</h2>
-            <p>
-              Right now, most of my energy goes into school, learning
-              consistently, and getting a little better every time I build
-              something.
-            </p>
-
-            <div className="note-tags flex flex-wrap">
-              <span>School</span>
-              <span>Learning</span>
-              <span>Improving</span>
-            </div>
-          </aside>
-        </section>
-
-        <div className="section-divider grid items-center" aria-hidden="true">
-          <span />
-          <Bow />
-          <span />
-        </div>
-
-        <section className="section-grid grid gap-4" id="about">
-          <article className="card about-card reveal-on-scroll">
-            <p className="section-label">
-              <Heart />
-              About
-            </p>
-            <h2>Full-stack developer with a back-end focus.</h2>
-            <p className="section-text">
-              I&apos;m a full-stack developer from Slovakia with over two years
-              of back-end experience. I&apos;m still in school, and Python is
-              still the language I enjoy most because it feels simple,
-              practical, and easy to work with. I also like understanding how
-              things work under the hood.
-            </p>
-          </article>
-
-          <aside className="card details-card reveal-on-scroll" style={revealDelay("80ms")}>
-            <p className="section-label">
-              <Apple />
-              At a glance
-            </p>
-            <h2>A quick intro.</h2>
-            <ul className="details-list">
-              <li>Based in Slovakia</li>
-              <li>Still in school</li>
-              <li>2+ years of back-end experience</li>
-              <li>Favorite language: Python</li>
-            </ul>
-          </aside>
-        </section>
-
-        <section className="projects-section" id="projects">
-          <div className="section-heading reveal-on-scroll">
-            <p className="section-label">
-              <Sparkle />
-              Projects
-            </p>
-            <h2>My work.</h2>
-          </div>
-
-          <div className="project-grid grid gap-4">
-            {featuredProjects.map((project, index) => (
-              <div
-                className="project-reveal reveal-on-scroll"
-                key={project.title}
-                style={revealDelay(`${index * 90}ms`)}
-              >
-                <article
-                  className="card project-card flex h-full flex-col overflow-hidden"
-                >
-                  <div className="project-tape" aria-hidden="true" />
-                  <div className="project-pin" aria-hidden="true">
-                    <Heart />
-                  </div>
-
-                  <div className="project-meta flex flex-wrap">
-                    <span>{project.category}</span>
-                    <span>{project.status}</span>
-                  </div>
-
-                  <h3>{project.title}</h3>
-                  <p className="project-description">{project.description}</p>
-
-                  <div className="project-footer flex flex-wrap">
-                    {project.actions
-                      ? project.actions.map((action) => (
-                          <a
-                            className={`project-action is-compact${action.primary ? " project-action-primary" : ""}`}
-                            href={action.href}
-                            key={action.label}
-                            rel="noreferrer"
-                            target="_blank"
-                          >
-                            {action.label}
-                          </a>
-                        ))
-                      : <span className="tiny-pill">Coming soon</span>}
-                  </div>
-                </article>
+              <div className="hero-actions">
+                <a className="button button-primary" href="#projects">
+                  See my work
+                  <ArrowIcon direction="down" />
+                </a>
+                <a className="button button-secondary" href={`mailto:${contactEmail}`}>
+                  Get in touch
+                </a>
               </div>
-            ))}
-          </div>
-        </section>
 
-        <div className="section-divider grid items-center" aria-hidden="true">
-          <span />
-          <Sparkle />
-          <span />
-        </div>
+              <dl className="hero-stats">
+                <div>
+                  <dt>Age</dt>
+                  <dd suppressHydrationWarning>{age}</dd>
+                </div>
+                <div>
+                  <dt>Back-end</dt>
+                  <dd>2+ yrs</dd>
+                </div>
+                <div>
+                  <dt>Based in</dt>
+                  <dd>Slovakia</dd>
+                </div>
+              </dl>
+            </div>
 
-        <section className="bottom-grid grid gap-4">
-          <article className="card skills-card reveal-on-scroll" id="skills">
-            <p className="section-label">
-              <Bow />
-              Skills
-            </p>
-            <h2>What I work with.</h2>
+            <aside
+              className="card spotlight hero-note reveal-on-scroll"
+              style={revealDelay("120ms")}
+            >
+              <div className="hero-note-head">
+                <p className="card-label">
+                  <Bow />
+                  Current focus
+                </p>
+                <span className="live-badge">
+                  <span className="status-dot" aria-hidden="true" />
+                  Now
+                </span>
+              </div>
+              <h2>Focused on school and steady progress.</h2>
+              <p>
+                Right now, most of my energy goes into school, learning
+                consistently, and getting a little better every time I build
+                something.
+              </p>
 
-            <div className="skills-groups">
-              {skillGroups.map((group) => (
-                <div className="skill-category" key={group.title}>
-                  <p className="skill-category-title">{group.title}</p>
+              <div className="note-tags">
+                <span>School</span>
+                <span>Learning</span>
+                <span>Improving</span>
+              </div>
+            </aside>
+          </section>
 
-                  <div className="skills-wrap flex flex-wrap">
+          <section className="section" id="about">
+            <SectionHeading index="01" label="About" title="Full-stack developer with a back-end focus." />
+
+            <div className="about-grid">
+              <article className="card spotlight about-card reveal-on-scroll">
+                <p className="section-text lead">
+                  I&apos;m a full-stack developer from Slovakia with over two years
+                  of back-end experience. I&apos;m still in school, and Python is
+                  still the language I enjoy most because it feels simple,
+                  practical, and easy to work with. I also like understanding how
+                  things work under the hood.
+                </p>
+              </article>
+
+              <aside
+                className="card spotlight details-card reveal-on-scroll"
+                style={revealDelay("90ms")}
+              >
+                <p className="card-label">
+                  <Apple />
+                  At a glance
+                </p>
+                <h3>A quick intro.</h3>
+                <ul className="details-list">
+                  <li>Based in Slovakia</li>
+                  <li>Still in school</li>
+                  <li>2+ years of back-end experience</li>
+                  <li>Favorite language: Python</li>
+                </ul>
+              </aside>
+            </div>
+          </section>
+
+          <section className="section" id="projects">
+            <SectionHeading index="02" label="Projects" title="My work." />
+
+            <div className="project-grid">
+              {featuredProjects.map((project, index) => {
+                const isFeatured = Boolean(project.actions?.length);
+
+                return (
+                  <div
+                    className={`project-reveal reveal-on-scroll${isFeatured ? " is-featured" : ""}`}
+                    key={`${project.title}-${index}`}
+                    style={revealDelay(`${index * 90}ms`)}
+                  >
+                    <article
+                      className={`card spotlight project-card${isFeatured ? " is-featured" : " is-placeholder"}`}
+                    >
+                      {isFeatured ? (
+                        <div className="project-visual" aria-hidden="true">
+                          <span className="project-monogram">{project.title.charAt(0)}</span>
+                          <span className="project-orbit" />
+                          <span className="project-pin">
+                            <Heart />
+                          </span>
+                        </div>
+                      ) : null}
+
+                      <div className="project-body">
+                        <div className="project-meta">
+                          <span className="project-category">{project.category}</span>
+                          <span
+                            className={`project-status${project.status === "Live" ? " is-live" : ""}`}
+                          >
+                            {project.status === "Live" ? (
+                              <span className="status-dot" aria-hidden="true" />
+                            ) : null}
+                            {project.status}
+                          </span>
+                        </div>
+
+                        <h3>{project.title}</h3>
+                        <p className="project-description">{project.description}</p>
+
+                        {project.tech?.length ? (
+                          <div className="project-stack" aria-label={`${project.title} technologies`}>
+                            {project.tech.map((tech) => (
+                              <span key={tech}>{tech}</span>
+                            ))}
+                          </div>
+                        ) : null}
+
+                        {project.highlights?.length ? (
+                          <ul className="project-highlights">
+                            {project.highlights.map((highlight) => (
+                              <li key={highlight}>{highlight}</li>
+                            ))}
+                          </ul>
+                        ) : null}
+
+                        <div className="project-footer">
+                          {project.actions ? (
+                            project.actions.map((action) => (
+                              <a
+                                className={`project-action${action.primary ? " project-action-primary" : ""}`}
+                                href={action.href}
+                                key={action.label}
+                                rel="noreferrer"
+                                target="_blank"
+                              >
+                                {action.label}
+                                <ArrowIcon />
+                              </a>
+                            ))
+                          ) : (
+                            <span className="tiny-pill">Coming soon</span>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="section" id="skills">
+            <SectionHeading index="03" label="Skills" title="What I work with." />
+
+            <div className="skills-grid">
+              {skillGroups.map((group, index) => (
+                <article
+                  className="card spotlight skill-category reveal-on-scroll"
+                  key={group.title}
+                  style={revealDelay(`${index * 70}ms`)}
+                >
+                  <div className="skill-category-header">
+                    <p className="skill-category-title">{group.title}</p>
+                    <p className="skill-category-summary">{group.summary}</p>
+                  </div>
+
+                  <div className="skill-icon-grid">
                     {group.items.map((skill) => (
-                      <span className="skill-pill" key={skill}>
-                        {skill}
+                      <span className="skill-tile" key={skill.name}>
+                        <span
+                          className={`skill-icon skill-icon-${skill.icon}`}
+                          aria-hidden="true"
+                        >
+                          <SkillIcon name={skill.icon} mark={skill.mark} />
+                        </span>
+                        <span className="skill-copy">
+                          <span className="skill-name">{skill.name}</span>
+                          <span className="skill-detail">{skill.detail}</span>
+                        </span>
                       </span>
                     ))}
                   </div>
-                </div>
+                </article>
               ))}
             </div>
-          </article>
+          </section>
 
-          <article
-            className="card contact-card reveal-on-scroll"
-            id="contact"
-            style={revealDelay("80ms")}
-          >
-            <p className="section-label">
-              <Heart />
-              Contact
-            </p>
-            <h2>Let&apos;s talk.</h2>
-            <p className="section-text">
-              If you&apos;d like to talk about a project, ask a question, or
-              just say hi, feel free to reach out.
-            </p>
+          <section className="section" id="contact">
+            <article className="card spotlight contact-card reveal-on-scroll">
+              <div className="contact-copy-block">
+                <p className="eyebrow">
+                  <span className="eyebrow-index">04</span>
+                  <Sparkle />
+                  Contact
+                </p>
+                <h2>Let&apos;s talk.</h2>
+                <p className="section-text">
+                  If you&apos;d like to talk about a project, ask a question, or
+                  just say hi, feel free to reach out.
+                </p>
+              </div>
 
-            <div className="contact-links flex flex-wrap">
-              <button className="contact-copy" onClick={handleCopyEmail} type="button">
-                <span>{contactEmail}</span>
-                <span className="contact-copy-hint">Tap or click to copy</span>
-              </button>
-              <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
-                GitHub
-              </a>
-              <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
-                Instagram
-              </a>
-              <a href="https://discord.com/" target="_blank" rel="noreferrer">
-                Discord
-              </a>
-            </div>
-          </article>
-        </section>
+              <div className="contact-actions">
+                <button className="contact-copy" onClick={handleCopyEmail} type="button">
+                  <span className="contact-copy-label">Email</span>
+                  <span className="contact-copy-email">{contactEmail}</span>
+                  <span className="contact-copy-hint">Tap or click to copy</span>
+                </button>
 
-        <footer
-          className="site-footer reveal-on-scroll flex flex-col items-center justify-center text-center"
-          style={revealDelay("120ms")}
+                <div className="contact-links">
+                  <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
+                    GitHub
+                    <ArrowIcon />
+                  </a>
+                  <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
+                    Instagram
+                    <ArrowIcon />
+                  </a>
+                  <a href="https://discord.com/" target="_blank" rel="noreferrer">
+                    Discord
+                    <ArrowIcon />
+                  </a>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <footer className="site-footer reveal-on-scroll" style={revealDelay("120ms")}>
+            <p>&copy; {currentYear} Jan</p>
+            <p>Made with ❤️ by Jan in Next.js.</p>
+          </footer>
+        </div>
+
+        <div
+          aria-live="polite"
+          className={`copy-toast${toastMessage ? " is-visible" : ""}`}
+          role="status"
         >
-          <p>&copy; {currentYear} Jan</p>
-          <p>Made with ❤️ by Jan in Next.js.</p>
-        </footer>
-      </div>
+          {toastMessage}
+        </div>
 
-      <div
-        aria-live="polite"
-        className={`copy-toast${toastMessage ? " is-visible" : ""}`}
-        role="status"
-      >
-        {toastMessage}
-      </div>
-
-      <button
-        className={`back-to-top${showBackToTop ? " is-visible" : ""}`}
-        onClick={handleBackToTop}
-        type="button"
-      >
-        Back to top
-      </button>
+        <button
+          aria-label="Back to top"
+          className={`back-to-top${showBackToTop ? " is-visible" : ""}`}
+          onClick={handleBackToTop}
+          type="button"
+        >
+          <ArrowIcon direction="up" />
+        </button>
       </main>
     </>
   );
