@@ -17,9 +17,27 @@ const mono = Geist_Mono({
   display: "swap"
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jano.eu.org";
+const siteTitle = "Jan's Portfolio";
+const siteDescription = "Portfolio site for Jan, a student and full-stack developer from Slovakia.";
+
 export const metadata: Metadata = {
-  title: "Jan's Portfolio",
-  description: "Portfolio site for Jan, a student and full-stack developer from Slovakia.",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: siteTitle,
+    title: siteTitle,
+    description: siteDescription,
+    locale: "en_US"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription
+  },
   icons: {
     icon: "/icon.png",
     shortcut: "/icon.png",

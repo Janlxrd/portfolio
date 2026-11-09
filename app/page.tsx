@@ -17,6 +17,7 @@ type FeaturedProject = {
   tech?: string[];
   highlights?: string[];
   actions?: ProjectAction[];
+  previewUrl?: string;
 };
 
 type SkillIconName =
@@ -66,9 +67,10 @@ const featuredProjects: FeaturedProject[] = [
       "A public multi-purpose Discord bot with a dedicated website and invite flow.",
     tech: ["Discord API", "TypeScript", "Slash commands", "Public bot"],
     highlights: ["Live website", "Server invite flow", "Built for public use"],
+    previewUrl: "vantix.top",
     actions: [
       {
-        href: "https://vantix.jano.eu.org",
+        href: "https://vantix.top",
         label: "Website",
         primary: true
       },
@@ -78,20 +80,10 @@ const featuredProjects: FeaturedProject[] = [
         label: "Invite to Discord"
       }
     ]
-  },
-  {
-    title: "Coming soon",
-    category: "Project",
-    status: "Coming soon",
-    description: "Another project card will go here later."
-  },
-  {
-    title: "Coming soon",
-    category: "Project",
-    status: "Coming soon",
-    description: "This space is for something I build next."
   }
 ];
+
+const githubUrl = "https://github.com/Janlxrd";
 
 const skillGroups: SkillGroup[] = [
   {
@@ -218,6 +210,57 @@ function Apple() {
         <span />
       </span>
     </span>
+  );
+}
+
+function BrowserPreview({ name, url }: { name: string; url: string }) {
+  return (
+    <div className="browser-frame">
+      <div className="browser-bar">
+        <span className="browser-dots">
+          <span />
+          <span />
+          <span />
+        </span>
+        <span className="browser-url">
+          <svg viewBox="0 0 16 16" focusable="false">
+            <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" fill="currentColor" />
+            <path d="M5.5 7V5.5a2.5 2.5 0 0 1 5 0V7" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+          {url}
+        </span>
+      </div>
+
+      <div className="browser-body">
+        <div className="mock-message">
+          <span className="mock-avatar mock-avatar-user" />
+          <div className="mock-message-content">
+            <span className="mock-author">you</span>
+            <span className="mock-command">/help</span>
+          </div>
+        </div>
+
+        <div className="mock-message">
+          <span className="mock-avatar mock-avatar-bot">{name.charAt(0)}</span>
+          <div className="mock-message-content">
+            <span className="mock-author">
+              {name}
+              <span className="mock-bot-tag">BOT</span>
+            </span>
+            <div className="mock-embed">
+              <span className="mock-embed-title">Here&apos;s what I can do</span>
+              <span className="mock-line" style={{ width: "88%" }} />
+              <span className="mock-line" style={{ width: "72%" }} />
+              <span className="mock-line" style={{ width: "54%" }} />
+              <div className="mock-buttons">
+                <span className="mock-button is-primary">Invite</span>
+                <span className="mock-button">Docs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -405,6 +448,8 @@ function CustomCursor() {
 
     const showCursor = () => {
       state.visible = true;
+      // Only hide the native cursor once the custom one is actually rendering.
+      document.documentElement.classList.add("has-custom-cursor");
       outer.style.opacity = "1";
       inner.style.opacity = "1";
     };
@@ -514,6 +559,7 @@ function CustomCursor() {
 
     return () => {
       window.cancelAnimationFrame(state.frame);
+      document.documentElement.classList.remove("has-custom-cursor");
       document.documentElement.removeEventListener("pointermove", handleMove);
       document.documentElement.removeEventListener("pointerrawupdate", handleMove as EventListener);
       window.removeEventListener("pointerdown", handlePointerDown);
@@ -837,7 +883,19 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // Block the context menu on decorative areas, but keep it where people
+    // actually need it: links, form fields, and any text they've selected.
     const handleContextMenu = (event: MouseEvent) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const isEssentialTarget = Boolean(
+        target?.closest('a[href], input, textarea, select, [contenteditable="true"]')
+      );
+      const hasSelection = Boolean(window.getSelection()?.toString().trim());
+
+      if (isEssentialTarget || hasSelection) {
+        return;
+      }
+
       event.preventDefault();
     };
 
@@ -1325,12 +1383,12 @@ export default function Home() {
 
               <dl className="hero-stats">
                 <div>
-                  <dt>Age</dt>
-                  <dd suppressHydrationWarning>{age}</dd>
-                </div>
-                <div>
                   <dt>Back-end</dt>
                   <dd>2+ yrs</dd>
+                </div>
+                <div>
+                  <dt>Favorite</dt>
+                  <dd>Python</dd>
                 </div>
                 <div>
                   <dt>Based in</dt>
@@ -1419,8 +1477,10 @@ export default function Home() {
                     >
                       {isFeatured ? (
                         <div className="project-visual" aria-hidden="true">
-                          <span className="project-monogram">{project.title.charAt(0)}</span>
                           <span className="project-orbit" />
+                          {project.previewUrl ? (
+                            <BrowserPreview name={project.title} url={project.previewUrl} />
+                          ) : null}
                           <span className="project-pin">
                             <Heart />
                           </span>
@@ -1482,6 +1542,24 @@ export default function Home() {
                   </div>
                 );
               })}
+
+              <div className="project-reveal project-more-reveal reveal-on-scroll" style={revealDelay("90ms")}>
+                <article className="card project-more">
+                  <div className="project-more-copy">
+                    <p className="project-more-title">
+                      <Sparkle />
+                      More projects on the way.
+                    </p>
+                    <p className="project-more-text">
+                      I&apos;m always building something new. Check GitHub for what I&apos;m working on.
+                    </p>
+                  </div>
+                  <a className="project-action" href={githubUrl} rel="noreferrer" target="_blank">
+                    GitHub
+                    <ArrowIcon />
+                  </a>
+                </article>
+              </div>
             </div>
           </section>
 
@@ -1536,35 +1614,15 @@ export default function Home() {
                 </p>
               </div>
 
-<<<<<<< HEAD
               <div className="contact-actions">
                 <button className="contact-copy" onClick={handleCopyEmail} type="button">
                   <span className="contact-copy-label">Email</span>
                   <span className="contact-copy-email">{contactEmail}</span>
                   <span className="contact-copy-hint">Tap or click to copy</span>
                 </button>
-=======
-            <div className="contact-links flex flex-wrap">
-              <button className="contact-copy" onClick={handleCopyEmail} type="button">
-                <span>{contactEmail}</span>
-                <span className="contact-copy-hint">Tap or click to copy</span>
-              </button>
-              <a href="https://github.com/" target="_blank" rel="noreferrer">
-                GitHub
-              </a>
-              <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
-                Instagram
-              </a>
-              <a href="https://discord.com/" target="_blank" rel="noreferrer">
-                Discord
-              </a>
-            </div>
-          </article>
-        </section>
->>>>>>> 04b0592b9dfa329e4d7cd2e8314f88831d4e0518
 
                 <div className="contact-links">
-                  <a href="https://github.com/Janlxrd" target="_blank" rel="noreferrer">
+                  <a href={githubUrl} target="_blank" rel="noreferrer">
                     GitHub
                     <ArrowIcon />
                   </a>
@@ -1583,7 +1641,12 @@ export default function Home() {
 
           <footer className="site-footer reveal-on-scroll" style={revealDelay("120ms")}>
             <p>&copy; {currentYear} Jan</p>
-            <p>Made with ❤️ by Jan in Next.js.</p>
+            <p className="site-footer-made">
+              Made with
+              <Heart />
+              <span className="sr-only">love</span>
+              by Jan in Next.js.
+            </p>
           </footer>
         </div>
 
