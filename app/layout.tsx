@@ -19,7 +19,7 @@ const mono = Geist_Mono({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jano.eu.org";
 const siteTitle = "Jan's Portfolio";
-const siteDescription = "Portfolio site for Jan, a student and full-stack developer from Slovakia.";
+const siteDescription = "I'm Jan, a student from Slovakia who writes code, mostly back-end. My projects and how to reach me.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

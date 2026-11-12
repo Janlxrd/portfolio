@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Jan — student and full-stack developer from Slovakia";
+export const alt = "Jan, student and developer from Slovakia";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -78,10 +78,10 @@ export default function OpengraphImage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{ display: "flex", fontSize: 112, fontWeight: 700, letterSpacing: -4, lineHeight: 1 }}>
-            Hello, I&apos;m&nbsp;<span style={{ color: colors.accent }}>Jan.</span>
+            Hey, I&apos;m&nbsp;<span style={{ color: colors.accent }}>Jan.</span>
           </div>
           <div style={{ display: "flex", fontSize: 38, color: colors.soft }}>
-            Student and full-stack developer from Slovakia.
+            Student from Slovakia. I write code, mostly back-end.
           </div>
         </div>
 
