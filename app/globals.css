@@ -160,17 +160,6 @@ p {
   pointer-events: none;
 }
 
-.backdrop-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
-}
-
 .background-glow {
   position: absolute;
   border-radius: 999px;
@@ -395,10 +384,6 @@ p {
   text-transform: uppercase;
 }
 
-.eyebrow-index {
-  color: var(--muted);
-}
-
 .card-label {
   color: var(--text-soft);
   letter-spacing: 0.12em;
@@ -412,6 +397,10 @@ p {
 
 .section-heading h2,
 .contact-card h2 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.7rem;
   max-width: 22ch;
   font-size: clamp(1.9rem, 4.2vw, 3rem);
   font-weight: 600;
@@ -437,19 +426,6 @@ p {
 }
 
 /* ---------- Status ---------- */
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem 0.9rem 0.4rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--text-soft);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
 
 .status-dot {
   position: relative;
@@ -488,7 +464,7 @@ p {
 }
 
 .morph-title {
-  margin-top: 1.75rem;
+  margin-top: 0;
   width: 100%;
   font-size: clamp(2.7rem, 7.4vw, 5.4rem);
   font-weight: 600;
@@ -655,44 +631,6 @@ p {
   transition: translate 260ms var(--ease-out);
 }
 
-.hero-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  margin: 3rem 0 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  width: 100%;
-  max-width: 34rem;
-}
-
-.hero-stats div {
-  flex: 1 1 0;
-  min-width: 6.5rem;
-  padding-right: 1.25rem;
-}
-
-.hero-stats div + div {
-  padding-left: 1.25rem;
-  border-left: 1px solid var(--border);
-}
-
-.hero-stats dt {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.hero-stats dd {
-  margin: 0.35rem 0 0;
-  color: var(--text);
-  font-size: 1.35rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
 /* ---------- Cards ---------- */
 
 .card {
@@ -749,26 +687,6 @@ p {
   gap: 1rem;
 }
 
-.live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.25rem 0.65rem;
-  border: 1px solid rgba(110, 231, 168, 0.22);
-  border-radius: 999px;
-  background: rgba(110, 231, 168, 0.07);
-  color: var(--live);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.live-badge .status-dot {
-  width: 0.4rem;
-  height: 0.4rem;
-}
-
 .hero-note h2 {
   margin-top: 1.5rem;
   font-size: clamp(1.3rem, 2.2vw, 1.6rem);
@@ -783,14 +701,6 @@ p {
   line-height: 1.7;
 }
 
-.note-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-}
-
-.note-tags span,
 .tiny-pill {
   display: inline-flex;
   align-items: center;
@@ -1250,32 +1160,6 @@ p {
   font-size: 0.74rem;
 }
 
-.project-highlights {
-  display: grid;
-  gap: 0.45rem;
-  margin: 1.25rem 0 0;
-  padding: 0;
-  color: var(--text-soft);
-  font-size: 0.92rem;
-  list-style: none;
-}
-
-.project-highlights li {
-  position: relative;
-  padding-left: 1.1rem;
-}
-
-.project-highlights li::before {
-  content: "";
-  position: absolute;
-  top: 0.62em;
-  left: 0;
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 999px;
-  background: var(--accent);
-}
-
 .project-footer {
   display: flex;
   flex-wrap: wrap;
@@ -1703,13 +1587,18 @@ p {
   filter: drop-shadow(0 2px 6px rgba(236, 77, 108, 0.25));
 }
 
+.section-heading h2 .bow,
+.contact-card h2 .bow {
+  width: 0.72em;
+}
+
 .project-pin .kitty-mark {
   width: 1.6rem;
 }
 
 .ornament-cinna {
-  margin-left: 0.18em;
-  vertical-align: -0.16em;
+  align-self: center;
+  margin-left: 0.22em;
   animation-duration: 4.8s;
 }
 
@@ -1807,19 +1696,6 @@ p {
   .skills-grid,
   .project-grid {
     grid-template-columns: 1fr;
-  }
-
-  .hero-stats div {
-    min-width: 0;
-    padding-right: 0.9rem;
-  }
-
-  .hero-stats div + div {
-    padding-left: 0.9rem;
-  }
-
-  .hero-stats dd {
-    font-size: 1.15rem;
   }
 }
 

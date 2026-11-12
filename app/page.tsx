@@ -15,7 +15,6 @@ type FeaturedProject = {
   status: string;
   description: string;
   tech?: string[];
-  highlights?: string[];
   actions?: ProjectAction[];
   previewUrl?: string;
 };
@@ -66,7 +65,6 @@ const featuredProjects: FeaturedProject[] = [
     description:
       "My Discord bot. It does a bit of everything, anyone can add it to their server, and it has its own website.",
     tech: ["TypeScript", "Discord API", "Slash commands"],
-    highlights: ["Public, anyone can invite it", "Has its own website", "Online right now"],
     previewUrl: "vantix.top",
     actions: [
       {
@@ -434,15 +432,13 @@ function ArrowIcon({ direction = "external" }: { direction?: "external" | "up" |
   );
 }
 
-function SectionHeading({ index, label, title }: { index: string; label: string; title: string }) {
+function SectionHeading({ title }: { title: string }) {
   return (
     <div className="section-heading reveal-on-scroll">
-      <p className="eyebrow">
-        <span className="eyebrow-index">{index}</span>
-        <Bow compact />
-        {label}
-      </p>
-      <h2>{title}</h2>
+      <h2>
+        {title}
+        <Bow />
+      </h2>
     </div>
   );
 }
@@ -849,15 +845,17 @@ function MorphingTitle() {
                 );
               })}
               {isLastWord ? (
-                <span
-                  className={`typing-cursor${animationComplete ? " is-settled" : ""}`}
-                  aria-hidden="true"
-                />
+                <>
+                  <span
+                    className={`typing-cursor${animationComplete ? " is-settled" : ""}`}
+                    aria-hidden="true"
+                  />
+                  <Cinnamoroll />
+                </>
               ) : null}
             </span>
           );
         })}
-        <Cinnamoroll />
       </span>
     </h1>
   );
@@ -914,8 +912,8 @@ function RoleCarousel() {
   }, [displayText, phase, roleIndex]);
 
   return (
-    <p className="hero-role-line" aria-label={`I am a ${heroRoles[roleIndex]}.`}>
-      <span>I am a</span>
+    <p className="hero-role-line" aria-label={`I'm a ${heroRoles[roleIndex]}`}>
+      <span>I&apos;m a</span>
       <span className="role-carousel" aria-hidden="true">
         {displayText || "\u00A0"}
         <span className="role-cursor" aria-hidden="true" />
@@ -1462,7 +1460,6 @@ export default function Home() {
       </div>
 
       <div className="backdrop" aria-hidden="true">
-        <div className="backdrop-grid" />
         <div className="background-glow glow-one" />
         <div className="background-glow glow-two" />
         <div className="background-glow glow-three" />
@@ -1504,11 +1501,6 @@ export default function Home() {
         <div className="page">
           <section className="hero" id="home">
             <div className="hero-copy reveal-on-scroll">
-              <p className="status-pill">
-                <span className="status-dot" aria-hidden="true" />
-                In school, coding on the side
-              </p>
-
               <MorphingTitle />
 
               <RoleCarousel />
@@ -1528,21 +1520,6 @@ export default function Home() {
                   Email me
                 </a>
               </div>
-
-              <dl className="hero-stats">
-                <div>
-                  <dt>Back-end</dt>
-                  <dd>2+ yrs</dd>
-                </div>
-                <div>
-                  <dt>Fav language</dt>
-                  <dd>Python</dd>
-                </div>
-                <div>
-                  <dt>Based in</dt>
-                  <dd>Slovakia</dd>
-                </div>
-              </dl>
             </div>
 
             <aside
@@ -1554,28 +1531,18 @@ export default function Home() {
                   <Bow />
                   Right now
                 </p>
-                <span className="live-badge">
-                  <span className="status-dot" aria-hidden="true" />
-                  Now
-                </span>
               </div>
-              <h2>Mostly school, honestly.</h2>
+              <h2>Mostly school, honestly</h2>
               <p>
                 School takes up most of my week, so I code whenever I get
                 some free time. Usually that means working on Vantix or
                 trying out something I haven&apos;t used before.
               </p>
-
-              <div className="note-tags">
-                <span>School</span>
-                <span>Vantix</span>
-                <span>Side projects</span>
-              </div>
             </aside>
           </section>
 
           <section className="section" id="about">
-            <SectionHeading index="01" label="About" title="A bit about me." />
+            <SectionHeading title="A bit about me" />
 
             <div className="about-grid">
               <article className="card spotlight about-card reveal-on-scroll">
@@ -1608,7 +1575,7 @@ export default function Home() {
           </section>
 
           <section className="section" id="projects">
-            <SectionHeading index="02" label="Projects" title="Stuff I've made." />
+            <SectionHeading title="Stuff I've made" />
 
             <div className="project-grid">
               {featuredProjects.map((project, index) => {
@@ -1659,13 +1626,6 @@ export default function Home() {
                           </div>
                         ) : null}
 
-                        {project.highlights?.length ? (
-                          <ul className="project-highlights">
-                            {project.highlights.map((highlight) => (
-                              <li key={highlight}>{highlight}</li>
-                            ))}
-                          </ul>
-                        ) : null}
 
                         <div className="project-footer">
                           {project.actions ? (
@@ -1696,7 +1656,7 @@ export default function Home() {
                   <div className="project-more-copy">
                     <p className="project-more-title">
                       <Bow compact />
-                      More coming soon.
+                      More coming soon
                     </p>
                     <p className="project-more-text">
                       Vantix is the big one for now. Smaller stuff and experiments end up on my GitHub.
@@ -1712,7 +1672,7 @@ export default function Home() {
           </section>
 
           <section className="section" id="skills">
-            <SectionHeading index="03" label="Skills" title="What I use." />
+            <SectionHeading title="What I use" />
 
             <div className="skills-grid">
               {skillGroups.map((group, index) => (
@@ -1750,15 +1710,13 @@ export default function Home() {
           <section className="section" id="contact">
             <article className="card spotlight contact-card reveal-on-scroll">
               <div className="contact-copy-block">
-                <p className="eyebrow">
-                  <span className="eyebrow-index">04</span>
-                  <Bow compact />
-                  Contact
-                </p>
-                <h2>Say hi.</h2>
+                <h2>
+                  Say hi
+                  <Bow />
+                </h2>
                 <p className="section-text">
-                  Got a question, an idea, or found a bug in Vantix? Send me an
-                  email or message me on Discord.
+                  Got a question, an idea, or found a bug in Vantix? Just send
+                  me an email.
                 </p>
               </div>
 
@@ -1772,14 +1730,6 @@ export default function Home() {
                 <div className="contact-links">
                   <a href={githubUrl} target="_blank" rel="noreferrer">
                     GitHub
-                    <ArrowIcon />
-                  </a>
-                  <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
-                    Instagram
-                    <ArrowIcon />
-                  </a>
-                  <a href="https://discord.com/" target="_blank" rel="noreferrer">
-                    Discord
                     <ArrowIcon />
                   </a>
                 </div>
