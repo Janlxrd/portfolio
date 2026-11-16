@@ -5,6 +5,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 
+import { siteUrl } from "./_lib/content";
+
 const sans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -17,7 +19,6 @@ const mono = Geist_Mono({
   display: "swap"
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jano.eu.org";
 const siteTitle = "Jan's Portfolio";
 const siteDescription = "I'm Jan, a student from Slovakia who writes code, mostly back-end. My projects and how to reach me.";
 
